@@ -1,1 +1,3 @@
 *.class
+../output/*.html
+../output/*.jpg
