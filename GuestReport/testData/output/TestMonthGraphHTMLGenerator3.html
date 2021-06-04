@@ -1,0 +1,60 @@
+  <div id="chart_div3">
+    <script type="text/javascript">
+
+       google.charts.load('current', {packages: ['corechart', 'bar']});
+       google.charts.setOnLoadCallback(drawBasic);
+
+       function drawBasic() {
+
+          var data = new google.visualization.DataTable();
+          data.addColumn('timeofday', 'Time of Day');
+          data.addColumn('number', 'Guests');
+
+          data.addRows([
+            [{v: [0, 0, 0], f: '0 am'}, 4],
+            [{v: [1, 0, 0], f: '1 am'}, 0],
+            [{v: [2, 0, 0], f: '2 am'}, 0],
+            [{v: [3, 0, 0], f: '3 am'}, 0],
+            [{v: [4, 0, 0], f: '4 am'}, 0],
+            [{v: [5, 0, 0], f: '5 am'}, 0],
+            [{v: [6, 0, 0], f: '6 am'}, 0],
+            [{v: [7, 0, 0], f: '7 am'}, 0],
+            [{v: [8, 0, 0], f: '8 am'}, 0],
+            [{v: [9, 0, 0], f: '9 am'}, 0],
+            [{v: [10, 0, 0], f: '10 am'}, 0],
+            [{v: [11, 0, 0], f: '11 am'}, 0],
+            [{v: [12, 0, 0], f: '12 pm'}, 0],
+            [{v: [13, 0, 0], f: '1 pm'}, 0],
+            [{v: [14, 0, 0], f: '2 pm'}, 0],
+            [{v: [15, 0, 0], f: '3 pm'}, 0],
+            [{v: [16, 0, 0], f: '4 pm'}, 0],
+            [{v: [17, 0, 0], f: '5 pm'}, 0],
+            [{v: [18, 0, 0], f: '6 pm'}, 0],
+            [{v: [19, 0, 0], f: '7 pm'}, 0],
+            [{v: [20, 0, 0], f: '8 pm'}, 0],
+            [{v: [21, 0, 0], f: '9 pm'}, 0],
+            [{v: [22, 0, 0], f: '10 pm'}, 0],
+            [{v: [23, 0, 0], f: '11 pm'}, 8],
+          
+          ]);
+
+          var options = {
+            title: 'Guest Count',
+		    legend : {position: 'none'},
+            hAxis: {
+              title: 'Time of Day',
+              format: 'h:mm a'
+            },
+            vAxis: {
+              title: '# of Guests'
+            }
+         };
+
+         var chart = new google.visualization.ColumnChart(
+            document.getElementById('chart_div3'));
+
+         chart.draw(data, options);
+       }
+	
+    </script>
+  </div>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Usage for %DATE%</title>
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tfoot {
+  border-top: thick double #000000;
+  text-align: left;
+  padding: 8px;
+}
+
+tr {
+  border: 2px solid #aaaaaa;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+</head>
+<body>
+<h2>Usage for %DATE%</h2>
+<table style="width:100%">
+  <thead>
+    <tr>
+      <th scope="col">Address</th>
+      <th scope="col">Number of People</th>
+      <th scope="col">Number of Guests</th>
+    </tr>
+  </thead>
+ 
+%TABLEROWS%
+  
+</table>
+
+</body>
+</html>
