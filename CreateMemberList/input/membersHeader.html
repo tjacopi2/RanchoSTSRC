@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<script language="javascript">
+
+  function sendLogRequest(name, address) {
+    var xhr = new XMLHttpRequest();
+    var url = "http://localhost:5000/log/" + address + "/" + name;
+    xhr.open("POST", url);
+    xhr.send("");
+    console.log("log msg sent");
+  }
+
+</script>
+
+
+<head>
+<title>Member List</title>
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr {
+  border: 2px solid #aaaaaa;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+</head>
+<body>
+<table style="width:100%">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Notes</th>
+      <th scope="col">Address</th>
+    </tr>
+  </thead>
+ 
+  %INSERT_HERE%
+  
+</table>
+
+</body>
+</html>
