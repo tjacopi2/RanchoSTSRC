@@ -1,7 +1,7 @@
 The purpose of this program is to create the notes.csv file.  If you can create the notes.csv file another way, 
 then this program is not needed.
 
-Format of notes.csv:  A *.csv file with three columns:
+The format of notes.csv:  A *.csv file with three columns:
   1. First column is the address
   2. Second column is the color of the text, defaults to 'red'.  
   3. Third column is the note for that address.  
