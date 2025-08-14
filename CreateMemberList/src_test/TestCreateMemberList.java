@@ -8,8 +8,6 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import loaders.NotesLoader;
-
 class TestCreateMemberList {
 
 	@BeforeEach
@@ -18,8 +16,6 @@ class TestCreateMemberList {
 
 	@Test
 	void testMain_SmallData() throws IOException {
-		try {
-			NotesLoader.searchCreateNotesFileOutputDirectory = false;
 			File testDataDirectory = new File("testData/TestCreateMemberList_small");
 			File testInputDataDirectory = new File(testDataDirectory, "input");
 			File testOutputDataDirectory = new File(testDataDirectory, "output");
@@ -41,21 +37,13 @@ class TestCreateMemberList {
 			CreateMemberList.main(null);
 
 			filesList = testOutputDataDirectory.listFiles();
-			assertEquals(11, filesList.length);
-			File htmlFile = null;
-			for(File file : filesList) {
-				assertTrue(file.length() > 1000, "Unexpected file length " + file.length());
-
-				if (htmlFile == null && file.getName().endsWith(".html")) {
-					htmlFile = file;
-				} else {
-					assertTrue(file.getName().endsWith(".jpg"));
-				}
-			}
-
-			assertNotNull(htmlFile, "Could not find html file");
+			assertEquals(1, filesList.length);
+			File htmlFile = filesList[0];
+			assertTrue(htmlFile.getName().endsWith(".html"), "File should be an html file but it is " + htmlFile.getName());
 			String data = Files.readString(htmlFile.toPath());
 
+			//System.out.println("generated html");
+			//System.out.println(data);
 			// Validate html file
 			List<Integer> tdOpen = TestMemberHTMLCreator.CountSubstrings(data, "<td");
 			List<Integer> tdClose = TestMemberHTMLCreator.CountSubstrings(data, "/td");
@@ -65,16 +53,13 @@ class TestCreateMemberList {
 			List<Integer> imgTag = TestMemberHTMLCreator.CountSubstrings(data, "img");
 
 			// The final data should have 14 html table rows.....1 is the header and 13 are data.
-			// There are 17 people, 10 with pictures and 2 with notes
+			// There are 21 people, 2 with pictures and 2 with notes
 			assertEquals(14, trOpen.size());
 			assertEquals(14, trClose.size());
 			assertEquals(39, tdOpen.size());
 			assertEquals(39, tdClose.size());
 			assertEquals(5, styleTag.size());  // there are 3 style tags in header + 2 from notes.csv
-			assertEquals(10, imgTag.size());
-		} finally {
-			NotesLoader.searchCreateNotesFileOutputDirectory = true;
-		}
+			assertEquals(2, imgTag.size());
 	}
 
 }

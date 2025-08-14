@@ -1,14 +1,9 @@
 import java.io.PrintWriter;
 import java.util.List;
-import java.util.Map;
-import java.util.zip.ZipEntry;
-
-import loaders.NotesData;
-import loaders.NotesLoader;
 
 public class MemberHTMLCreator {
 	private PrintWriter writer;
-	protected static final String HTMLSpace = "&nbsp";
+	protected static final String HTMLSpace = "&nbsp;";
 	protected static final String ID_REPLACEMENT_TAG = "%ID%";
 	protected static final String NAME_REPLACEMENT_TAG = "%NAME%";
 	protected static final String ImageTag = "<img src=\"" + ID_REPLACEMENT_TAG + ".jpg\" alt=\"" + NAME_REPLACEMENT_TAG + "\" width=\"200\" height=\"200\" />";
@@ -21,8 +16,7 @@ public class MemberHTMLCreator {
 		this.writer = writer;
 	}
 
-	public void generateMembers(List<PersonData> people, Map<String, ZipEntry> pictureMap,
-			Map<String, NotesData> notesMap) {
+	public void generateMembers(List<PersonData> people) {
 		/*
 		 * <tr>
              <td>Tom Jacopi3&nbsp <img src="Dante Mingione_3.jpg" alt="tom" width="200" height="200"></img> &nbsp &nbsp Terrie Jacopi4&nbsp <img src="Dante Mingione_4.jpg" alt="terrie" width="200" height="200"></img></td>
@@ -32,18 +26,20 @@ public class MemberHTMLCreator {
 		 */
 		String previousStreet = "";
 		String previousHouseNumber = "";
+		String notes = "";
 		boolean firstTime = true;
 		for (PersonData person : people) {
 			
 			// If the address has changed, make a new table entry
 			if (!previousStreet.equalsIgnoreCase(person.getStreet()) || !previousHouseNumber.equalsIgnoreCase(person.getHouseNumber())) {
 				if (!firstTime) {
-					endPreviousTableEntry(notesMap, previousStreet, previousHouseNumber);
+					endPreviousTableEntry(notes, previousStreet, previousHouseNumber);
 				}
 				firstTime = false;
 				
 				previousStreet = person.getStreet();
 				previousHouseNumber = person.getHouseNumber();
+				notes = "";
 				
 				// Start a new table entry
 				writer.println("  <tr>");
@@ -66,21 +62,22 @@ public class MemberHTMLCreator {
 			writer.print(person.getName());
 			writer.print("</a>");
 			
+			notes = notes + "  " + person.getNotes();
 			//writer.print(HTMLSpace);writer.print(HTMLSpace);
 			
 			// Write the image tag if we have a new person
-			if (pictureMap.containsKey(person.getId())) {
-				String personEntry = ImageTag.replace(ID_REPLACEMENT_TAG, person.getId()).replace(NAME_REPLACEMENT_TAG, person.getName());
+			if (person.getPictureFileName() != null && person.getPictureFileName().length()>0) {
+				String personEntry = ImageTag.replace(ID_REPLACEMENT_TAG, person.getPictureFileName()).replace(NAME_REPLACEMENT_TAG, person.getName());
 				writer.print(personEntry);
 			}
 			writer.print("<br>");    // Break the line after each persons name
 		}
 		
 		// close off previous table entry
-		endPreviousTableEntry(notesMap, previousStreet, previousHouseNumber);
+		endPreviousTableEntry(notes, previousStreet, previousHouseNumber);
 	}
 
-	protected void endPreviousTableEntry(Map<String, NotesData> notesMap, String previousStreet, String previousHouseNumber) {
+	protected void endPreviousTableEntry(String notes, String previousStreet, String previousHouseNumber) {
 		/*  This is that the method should produce
 		 *    <a>Guest</a><br>                        </td>
               <td style="color: blue;">Some silly note</td>
@@ -93,10 +90,9 @@ public class MemberHTMLCreator {
 		writer.println("</td>");
 
 		// Write notes
-		String notesMapKey = NotesLoader.MakeNotesKey(previousHouseNumber, previousStreet);
-		NotesData notesData = NotesData.FuzzyRemove(notesMapKey, notesMap); //notesMap.get(notesMapKey);
-		if (notesData != null) {
-			String notesEntry = NotesTag.replace(COLOR_REPLACEMENT_TAG, notesData.color).replace(NOTE_TEXT_REPLACEMENT_TAG, notesData.note);
+		notes = notes.trim();
+		if (notes.length() > 0) {
+			String notesEntry = NotesTag.replace(COLOR_REPLACEMENT_TAG, "red").replace(NOTE_TEXT_REPLACEMENT_TAG, notes);
 			writer.print(notesEntry);
 		} else {
 			writer.print("    <td>");

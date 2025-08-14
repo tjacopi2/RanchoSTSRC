@@ -1,18 +1,14 @@
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.zip.ZipEntry;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import loaders.NotesData;
-import loaders.NotesLoader;
 
 class TestMemberHTMLCreator {
 
@@ -21,21 +17,14 @@ class TestMemberHTMLCreator {
 	private static final String Person3 = "Katie Smith";
 	private static final String Person4 = "Ed Wilson";
 	private static final String Person5 = "Jake";
-	private static final String Person1_ID = "1";
-	private static final String Person2_ID = "2";
-	private static final String Person3_ID = "3";
-	private static final String Person4_ID = "4";
-	private static final String Person5_ID = "5";
-	private static final String Color_Blue = "blue";
-	private static final String Note1 = "Some silly note";
-	private static final String Color_Green = "green";
-	private static final String Note2 = "Some other silly note";
+	private static final String Person1_PictureFile = "1.jpg";
+	private static final String Person4_PictureFile = "4.jpg";
+	private static final String Person1_Note1 = "Some silly note";
+	private static final String Person2_Note2 = "Some other silly note";
 	private static final String StreetNumber1 = "123";
 	private static final String StreetNumber2 = "456";
 	private static final String StreetName1 = "Dondero";
 	private static final String StreetName2 = "Sorrento";
-	private static final String NoteKey1 = NotesLoader.MakeNotesKey(StreetNumber1, StreetName1);
-	private static final String NoteKey2 = NotesLoader.MakeNotesKey(StreetNumber2, StreetName2);
 	
 	
 	@BeforeEach
@@ -45,24 +34,17 @@ class TestMemberHTMLCreator {
 	@Test
 	void testGenerateMembers() {
 		List<PersonData> people = new ArrayList<PersonData>();
-		people.add(new PersonData(StreetName1, StreetNumber1, Person1, Person1_ID));
-		people.add(new PersonData(StreetName1, StreetNumber1, Person2, Person2_ID));
-		people.add(new PersonData(StreetName1, StreetNumber1, Person3, Person3_ID));
-		people.add(new PersonData(StreetName1, StreetNumber2, Person4, Person4_ID));
-		people.add(new PersonData(StreetName2, StreetNumber1, Person5, Person5_ID));
+		people.add(new PersonData(StreetName1, StreetNumber1, Person1, Person1_PictureFile, Person1_Note1));
+		people.add(new PersonData(StreetName1, StreetNumber1, Person2, "", Person2_Note2));
+		people.add(new PersonData(StreetName1, StreetNumber1, Person3, "", ""));
+		people.add(new PersonData(StreetName1, StreetNumber2, Person4, Person4_PictureFile, ""));
+		people.add(new PersonData(StreetName2, StreetNumber1, Person5, "", ""));
 		
-		Map<String, ZipEntry> pictureMap = new HashMap<String, ZipEntry>();
-		pictureMap.put(Person2_ID, null);
-		pictureMap.put(Person4_ID, null);
-		
-		Map<String, NotesData> notesMap = new HashMap<String, NotesData>();
-		notesMap.put(NoteKey1, new NotesData(Color_Blue, Note1));
-		notesMap.put(NoteKey2, new NotesData(Color_Green, Note2));
-		
+				
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
 		MemberHTMLCreator creator = new MemberHTMLCreator(pw);
-		creator.generateMembers(people, pictureMap, notesMap);
+		creator.generateMembers(people);
 		pw.flush();
 		String data = sw.toString();
 		
@@ -86,8 +68,8 @@ class TestMemberHTMLCreator {
 		assertTrue(data.contains(StreetNumber1 + MemberHTMLCreator.HTMLSpace + StreetName2));
 		assertTrue(data.contains(StreetNumber2 + MemberHTMLCreator.HTMLSpace + StreetName1));
 		assertFalse(data.contains(StreetNumber2 + MemberHTMLCreator.HTMLSpace + StreetName2));
-		assertTrue(data.contains(Note1));
-		assertFalse(data.contains(Note2));
+		assertTrue(data.contains(Person1_Note1));
+		assertTrue(data.contains(Person2_Note2));
 		for (PersonData pd : people) {
 			assertTrue(data.contains(pd.getName()));
 		}
@@ -132,21 +114,17 @@ class TestMemberHTMLCreator {
 
 	@Test
 	void testEndPreviousTableEntryWithNote() {
-		Map<String, NotesData> notesMap = new HashMap<String, NotesData>();
-		notesMap.put(NoteKey1, new NotesData(Color_Blue, Note1));
-		notesMap.put(NoteKey2, new NotesData(Color_Green, Note2));
-		
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
 		MemberHTMLCreator creator = new MemberHTMLCreator(pw);
-		creator.endPreviousTableEntry(notesMap, StreetName1, StreetNumber1);
+		creator.endPreviousTableEntry(Person1_Note1, StreetName1, StreetNumber1);
 		pw.flush();
 		String data = sw.toString();
 		System.err.println(data);
 		
 		assertTrue(data.contains(StreetName1));
 		assertTrue(data.contains(StreetNumber1));
-		assertTrue(data.contains(Note1));
+		assertTrue(data.contains(Person1_Note1));
 		System.out.println(data);
 		
 		List<Integer> aOpen = CountSubstrings(data, "<a");
@@ -180,20 +158,16 @@ class TestMemberHTMLCreator {
 
 	@Test
 	void testEndPreviousTableEntryWithoutNote() {
-		Map<String, NotesData> notesMap = new HashMap<String, NotesData>();
-		notesMap.put(NoteKey1, new NotesData(Color_Blue, Note1));
-		notesMap.put(NoteKey2, new NotesData(Color_Green, Note2));
-		
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
 		MemberHTMLCreator creator = new MemberHTMLCreator(pw);
-		creator.endPreviousTableEntry(notesMap, StreetName2, StreetNumber1);
+		creator.endPreviousTableEntry("", StreetName2, StreetNumber1);
 		pw.flush();
 		String data = sw.toString();
 		
 		assertTrue(data.contains(StreetName2));
 		assertTrue(data.contains(StreetNumber1));
-		assertFalse(data.contains(Note1));
+		assertFalse(data.contains(Person1_Note1));
 		System.out.println(data);
 		
 		List<Integer> tdOpen = CountSubstrings(data, "<td");
@@ -221,10 +195,12 @@ class TestMemberHTMLCreator {
 
 	private void validateTagOrder(List<List<Integer>> tagOrder) {
 		int previousTagIndex = -1;
+		int count = 0;
 		for (List<Integer> nextTag : tagOrder) {
-			assertTrue(nextTag.get(0) > previousTagIndex);
+			assertTrue(nextTag.get(0) > previousTagIndex, "error at tag # " + count);
 			previousTagIndex = nextTag.get(0);
 			nextTag.remove(0);
+			count++;
 		}
 	}
 

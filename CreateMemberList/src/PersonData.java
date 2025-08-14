@@ -6,30 +6,36 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
-
-import loaders.NotesLoader;
+import java.util.Map;
 
 public class PersonData {
 	
-	protected static final String Default_Person_Filename = "Personnel File.csv";
+	protected static final String Default_Person_Filename = "ranchoHouseholdDatasheets.csv";
 	public static final String Unknown = "<Unknown>";
 	public static final String UnknownHouseNumber = "0";
 	public static final String[] KnownFunnyAddressCodesArray = {"staff", "contractors", "keycode" };
 	public static final List<String> KnownFunnyAddressCodes = Arrays.asList(KnownFunnyAddressCodesArray);
 	
+	public static final String PersonNameColumnName = "Full Name";
+	public static final String AddressColumnName = "Address";
+	public static final String NotesColumnName = "Check-in Notes";
+	public static final String PictureFileColumnName = "Picture File Name";
 	
 	private String street = null;
 	private String houseNumber = null;
 	private String name = null;
-	private String id = null;
+	private String pictureFileName = null;
+	private String notes = null;
 	
-	public PersonData(String street, String houseNumber, String name, String id) {
+	public PersonData(String street, String houseNumber, String name, String pictureFileName, String notes) {
 		super();
 		this.street = street;
 		this.houseNumber = houseNumber;
 		this.name = name;
-		this.id = id;
+		this.pictureFileName = pictureFileName;
+		this.notes = notes;
 	}
 
 	public String getStreet() {
@@ -44,8 +50,12 @@ public class PersonData {
 		return name;
 	}
 
-	public String getId() {
-		return id;
+	public String getPictureFileName() {
+		return pictureFileName;
+	}
+	
+	public String getNotes() {
+		return notes;
 	}
 	
 	public static List<PersonData> loadPeople(File inputDirectory) throws IOException {
@@ -57,7 +67,7 @@ public class PersonData {
 		File[] inputFiles = inputDirectory.listFiles( new FilenameFilter() {
 		    @Override
 		    public boolean accept(File dir, String name) {
-		        return (name.toLowerCase().endsWith(".csv") && !name.equalsIgnoreCase(NotesLoader.NotesFileName));
+		        return (name.toLowerCase().endsWith(".csv") );
 		    }
 		} );
 		
@@ -86,10 +96,12 @@ public class PersonData {
 		List<PersonData> people = new ArrayList<PersonData>();
 		
 		List<String> lines = Files.readAllLines(personFile.toPath());
+		
+		Map<String, Integer> columnMapping = findColumnMappings(lines.get(0));
 		lines.remove(0);   // First line are column headers
 		int lineNumber = 2;         // start at two because we removed the first line
 		for (String line : lines) {
-			PersonData person = parseLine(line, lineNumber);
+			PersonData person = parseLine(line, lineNumber, columnMapping);
 			if (person != null) {
      			people.add(person);
 			}
@@ -97,26 +109,48 @@ public class PersonData {
 		}
 		return people;
 	}
+	
 
-	protected static PersonData parseLine(String line, int lineNumber) {
-		// 14,'RSTSC/Members/Los Palmos/252 Los Palmos,Paulina Thurmann 4,2,4086938057,pthurmann@yahoo.com,'2020/10/27 16:00:28,'2030/10/27 16:00:28,13258283;,,
-        String[] columns = line.split(",");
-        if (columns.length < 3) {
+	protected static Map<String, Integer> findColumnMappings(String columnHeaders) throws IOException {
+		Map<String, Integer> columnMapping = new HashMap<String, Integer>();
+        String[] columnNames = columnHeaders.split(",");
+        if (columnNames.length < 4) {
+        	throw new IOException("File is invalid because first line much have at least 4 column names, and it only has " + columnNames.length + "  Line is: "+ columnHeaders);
+        }
+
+        List<String> columnNameList = Arrays.asList(columnNames); 
+        columnMapping.put(PersonNameColumnName, findColumnNameIndex(columnNameList, PersonNameColumnName, columnHeaders));
+        columnMapping.put(AddressColumnName, findColumnNameIndex(columnNameList, AddressColumnName, columnHeaders));
+        columnMapping.put(NotesColumnName, findColumnNameIndex(columnNameList, NotesColumnName, columnHeaders));
+        columnMapping.put(PictureFileColumnName, findColumnNameIndex(columnNameList, PictureFileColumnName, columnHeaders));
+	
+		return columnMapping;
+	}
+	
+	protected static Integer findColumnNameIndex(List<String> columnNames, String columnName, String columnHeaders) throws IOException {
+	  int index = columnNames.indexOf(columnName);
+	  if (index < 0) {
+	   	throw new IOException("File is invalid because there is not a column called " + columnName + "  Column Header Line is: "+ columnHeaders);
+	  }
+	  return Integer.valueOf(index);
+	}
+
+	protected static PersonData parseLine(String line, int lineNumber, Map<String, Integer> columnMapping) {
+		// Member,182 Castillon Way,HO Amzi Slutzky,Outstanding Dues $142,Amzi.jpg,
+        //String[] columns = line.split(",");
+        String[] columns = PersonData.splitLine(line);
+        
+        // This data format gives blanks lines, so ingore them.
+        if (columns.length == 1 && columns[0].trim().length() == 0) {
+        	return null;
+        }
+        if (columns.length < 4) {
         	System.err.println("Line " + lineNumber + " is invalid because not enough columns");
         	return null;
         }
-        
-        // Look at the first column and insure its the numeric ID
-        try {
-        	Integer.valueOf(columns[0]);
-        } catch (NumberFormatException e) {
-        	System.err.println("Line " + lineNumber + " has the value " + columns[0] + " for the ID in column 1 which should be a number.  Line is " + line);
-        	return null;	
-        }
-        
-        // Get the address out of the second column.  Split apart the house number from the street
-        String[] addressColumns = columns[1].split("/");
-        String address = addressColumns[addressColumns.length -1].trim();
+                    
+        // Get the address out of the address column.  Split apart the house number from the street
+        String address = columns[columnMapping.get(AddressColumnName)].trim();
         StringBuffer sbStreet = new StringBuffer();
         StringBuffer sbHouseNumber = new StringBuffer();
         for (int i = 0; i < address.length(); i++) {
@@ -150,15 +184,8 @@ public class PersonData {
         }
     
         
-        // Now process the name.  Some names have a digit after them.  Remove that digit
-        String name = columns[2];
-        for (int i = name.length() -1; i >=0; i--) {
-        	if (Character.isDigit(name.charAt(i))) {
-        		name = name.substring(0, i);
-        	} else {
-        		break;               // we can quit once we run out of digits
-        	}
-        }
+        // Now process the name.  
+        String name = columns[columnMapping.get(PersonNameColumnName)];
         name = name.replaceAll("\"", "");  // Insure we have no quotes in the name
         name = name.replaceAll("'", "");
         name = name.trim();
@@ -168,7 +195,19 @@ public class PersonData {
         	name = Unknown;
         }
         
-		return new PersonData(street, houseNumber, name, columns[0]);
+        // Get any notes
+        String notes = "";
+        if (columns.length > columnMapping.get(NotesColumnName)) {
+        	notes = columns[columnMapping.get(NotesColumnName)].trim();
+        }
+        
+        // Get the image file name
+        String imageFileName = "";
+        if (columns.length > columnMapping.get(PictureFileColumnName)) {
+        	imageFileName = columns[columnMapping.get(PictureFileColumnName)].trim();
+        }
+        
+		return new PersonData(street, houseNumber, name, imageFileName, notes);
 	}
 
 	protected static File selectPersonFile(File[] inputFiles) throws IOException {
@@ -194,6 +233,50 @@ public class PersonData {
 		throw new IOException(msg);
 	}
 
+	protected static String[] splitLine(String line) {
+		List<String> strings = new ArrayList<String>();
+		int startIndex = 0;
+		boolean inQuotedColumn = false;
+		for (int i = 0; i<line.length(); i++) {
+			if (line.charAt(i) == ',' && !inQuotedColumn) {
+				if (i == startIndex) {
+					strings.add("");
+				} else {
+					// trim quotes if needed
+					String colData = line.substring(startIndex,i);
+					if (colData.length() >= 3 && colData.charAt(0) == '"' && colData.charAt(colData.length()-1) == '"') {
+					  // This was a quoted column, strip the quotes.
+						colData = colData.substring(1, colData.length()-1);
+					}
+				    strings.add(colData);
+				}
+				startIndex = i+1;
+			} else {
+				if (line.charAt(i) == '"') {
+					if (inQuotedColumn) {
+						inQuotedColumn = false;
+					} else if (startIndex == i) {           // Is this the first char in the column?
+						inQuotedColumn = true;
+					}
+				}
+			}
+		}
+		
+		// Add the last token
+		if (startIndex == line.length()) {
+			strings.add("");
+		} else {
+			// trim quotes if needed
+			String colData = line.substring(startIndex);
+			if (colData.length() >= 3 && colData.charAt(0) == '"' && colData.charAt(colData.length()-1) == '"') {
+			  // This was a quoted column, strip the quotes.
+				colData = colData.substring(1, colData.length()-1);
+			}
+		    strings.add(colData);
+		}
+		return strings.toArray(new String[0]);
+	}
+	
 	// Compare first on the street, then on the number.  This groups all entries by the street and then ascending address within the street.
 	private static class PersonDataComparator implements Comparator<PersonData> {
 		@Override
