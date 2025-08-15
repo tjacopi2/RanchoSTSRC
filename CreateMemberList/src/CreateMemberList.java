@@ -45,24 +45,16 @@ public class CreateMemberList {
 		out.flush();
 		out.close();
 
-		// Validate the image files
-
-		/*
-		int invalidEntries = 0;
-		StringBuffer sb = new StringBuffer();
-		for (String address : notesMap.keySet()) {
-    		// There are some bogus values in the notes.csv data, so unless the address begins with a digit assume it can be ingored.
-    		if (Character.isDigit(address.charAt(0))) {
-    			invalidEntries++;
-    			sb.append(address);
-    			sb.append(", ");
-    		}
-    	}
-		if (sb.length() > 0) {
-			System.out.println("Warning: A total of " + invalidEntries + " addresses were found in the notes.csv file but not in the person list");
-		    System.out.println("...The addresses are: " + sb.toString());
+		// Validate the image files exist in the output directory
+		for (PersonData person : people) {
+			if (person.getPictureFileName() != null && person.getPictureFileName().length() > 0) {
+				File pictureFile = new File(outputDirectory, person.getPictureFileName());
+				if (!pictureFile.exists()) {
+					System.out.println("Warning: Image file " + person.getPictureFileName() + " does not exist in " + outputDirectory.getAbsolutePath());
+				}
+			}
 		}
-		*/
+	
 
 	}
 

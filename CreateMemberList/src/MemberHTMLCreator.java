@@ -6,7 +6,7 @@ public class MemberHTMLCreator {
 	protected static final String HTMLSpace = "&nbsp;";
 	protected static final String ID_REPLACEMENT_TAG = "%ID%";
 	protected static final String NAME_REPLACEMENT_TAG = "%NAME%";
-	protected static final String ImageTag = "<img src=\"" + ID_REPLACEMENT_TAG + ".jpg\" alt=\"" + NAME_REPLACEMENT_TAG + "\" width=\"200\" height=\"200\" />";
+	protected static final String ImageTag = "<img src=\"" + ID_REPLACEMENT_TAG + "\" alt=\"" + NAME_REPLACEMENT_TAG + "\" width=\"200\" height=\"200\" />";
 	protected static final String COLOR_REPLACEMENT_TAG = "%COLOR%";
 	protected static final String NOTE_TEXT_REPLACEMENT_TAG = "%NOTE%";
 	protected static final String NotesTag = "    <td style=\"color: " + COLOR_REPLACEMENT_TAG + ";\">" + NOTE_TEXT_REPLACEMENT_TAG;

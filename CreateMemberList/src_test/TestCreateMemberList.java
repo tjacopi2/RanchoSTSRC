@@ -31,15 +31,31 @@ class TestCreateMemberList {
 					};
 				}
 			}
+			
+			// Copy jpg files to output directory
+			filesList = testInputDataDirectory.listFiles();
+			for(File file : filesList) {
+				if(file.isFile()) {
+					if (file.getName().endsWith(".jpg")) {
+						File newFile = new File(testOutputDataDirectory, file.getName());
+						Files.copy(file.toPath(), newFile.toPath());
+					};
+				}
+			}
 
 			CreateMemberList.inputDirectory = testInputDataDirectory;
 			CreateMemberList.outputDirectory = testOutputDataDirectory;
 			CreateMemberList.main(null);
 
 			filesList = testOutputDataDirectory.listFiles();
-			assertEquals(1, filesList.length);
-			File htmlFile = filesList[0];
-			assertTrue(htmlFile.getName().endsWith(".html"), "File should be an html file but it is " + htmlFile.getName());
+			File htmlFile = null;
+			assertTrue(filesList.length >= 3);
+			for(File file : filesList) {
+				if (file.getName().endsWith(".html")) {
+					htmlFile = file;
+				}
+			}
+			assertNotNull(htmlFile, "Could not find an html file in directory " + testOutputDataDirectory.getName());
 			String data = Files.readString(htmlFile.toPath());
 
 			//System.out.println("generated html");
