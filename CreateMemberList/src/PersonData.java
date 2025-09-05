@@ -226,7 +226,7 @@ public class PersonData {
 			dirName = inputFiles[0].getParentFile().getCanonicalPath();
 		}
 		String msg = "Could not determine .csv file containing person information in inputDirectory " + dirName + "\n" + 
-				"Personal file should be named \"" + Default_Person_Filename + "\" or be the only .csv file in the directory other than notes.csv.  Other csv files in the directory are: ";
+				"Personal file should be named \"" + Default_Person_Filename + "\" or be the only .csv file in the directory.  Other csv files in the directory are: ";
 		for (File f : inputFiles) {
 			msg = msg + f.getCanonicalPath() + "\n";
 		}
