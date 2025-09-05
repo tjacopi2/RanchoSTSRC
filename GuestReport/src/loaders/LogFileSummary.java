@@ -72,6 +72,7 @@ public class LogFileSummary {
 				h.people++;
 			}
     	}
+    	reader.close();
     	
     	for (Household h : householdMap.values()) {
     		summary.households.add(h);

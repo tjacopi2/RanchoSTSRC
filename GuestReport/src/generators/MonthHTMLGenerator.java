@@ -30,11 +30,13 @@ public class MonthHTMLGenerator {
 		graphGenerator = aGraphGenerator;
 	}
 
+	@SuppressWarnings("unchecked")
 	public String generate(List<LogFileSummary> summaryList) {
 		int[] dayOfWeekHOAPeople = {0,0,0,0,0,0,0};
 		int[] dayOfWeekHOAGuests = {0,0,0,0,0,0,0};
 		int[] dayOfWeekAMPeople = {0,0,0,0,0,0,0};
 		int[] dayOfWeekAMGuests = {0,0,0,0,0,0,0};
+		@SuppressWarnings("rawtypes")
 		Map[] dayOfWeekPersonCountByHour = { new HashMap<Integer, Integer>(), 
 				new HashMap<Integer, Integer>(), new HashMap<Integer, Integer>(), new HashMap<Integer, Integer>(), 
 				new HashMap<Integer, Integer>(), new HashMap<Integer, Integer>(), new HashMap<Integer, Integer>()
