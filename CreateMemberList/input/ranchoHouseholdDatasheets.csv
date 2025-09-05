@@ -1,22 +1,369 @@
-Member Type,Address,Full Name,Check-in Notes,Picture File Name,Internal Office Notes
-Associate Member,1883 Orange Grove Drive,AM Tim Hodge,,,
-Associate Member,1883 Orange Grove Drive,AM Kelly Hodge,,,
-Associate Member,192 Coffeeberry Drive,AM Amy Ward,,,
-Associate Member,192 Coffeeberry Drive,AM Jonathon Ward,,,
-Associate Member,7232 Golf Course Lane,AM Amy Raczkowski,,,
-Associate Member,7232 Golf Course Lane,AM Andrew Raczkowski,,,
-Associate Member,7232 Golf Course Lane,Colin Raczkowski,,,
-Associate Member,7232 Golf Course Lane,Daughter Raczkowski,,,
-Member,182 Castillon Way,HO Amzi Slutzky,Outstanding Dues $142,,
-Member,184 Castillon Way,HO Gilbert Patrick,,,
-Member,185 Castillon Way,HO Larry Jorstad,,,
-Member,204 Castillon Way,HO Huong Nguyen,,,
-Renter,6346 Camino Verde Drive,RENTER Katie Jacopi,,IMG_6013.HEIC,
-Renter,6346 Camino Verde Drive,RENTER Troy Jackson,,,
-Vendor,SVS,David  Phipps,,,
-Vendor,SVS,Jerry Bozzo,,,
-Vendor,Intero,Laurie Hansen,,,
-Vendor,Aqua,Amy Raczkowski,,,
-Vendor,Aqua,Darlene Vossbri,,,
-Vendor,Tennis,Thomas Le,,,
-Vendor,Pickleball,Luc Nguyen,,,
+Member Type,Full Name,Address,Year Born (A for Adult),Check-in Notes,Picture File Name,Internal Office Notes
+
+HOA Member,HO - Soumya Jojo,328 El Portal Way ,A,,,
+
+HOA Member,HO - Jeremy Jojo,328 El Portal Way ,A,,,
+
+HOA Member,Sonia Mathew,328 El Portal Way ,A,,,
+
+HOA Member,Zavian Jojo,328 El Portal Way ,2021,,,
+
+HOA Member,Zayah Jojo,328 El Portal Way ,2023,,,
+
+HOA Member,Zeke Jojo,328 El Portal Way ,2025,,,
+
+HOA Member,HO - Philrene Toney,6454 Purple Hills Drive,A,,,
+
+HOA Member,HO - Kenneth Toney,6454 Purple Hills Drive,A,,,
+
+HOA Member,Nicholas Toney,6454 Purple Hills Drive,A,,,
+
+HOA Member,Alexis Toney,6454 Purple Hills Drive,A,,,
+
+HOA Member,HO - Xudong Huang,322 El Portal Way,A,,,
+
+HOA Member,HO - Susan Thomas,254 El Portal Way,A,,,
+
+HOA Member,HO - Kurien Thomas,254 El Portal Way,A,,,
+
+HOA Member,Hope Thomas,254 El Portal Way,2019,,,
+
+HOA Member,Benjamin Thomas,254 El Portal Way,2020,,,
+
+HOA Member,HO - Paul Kavanagh,289 Moraga Way,A,,,
+
+HOA Member,HO - Maggie Greaney,289 Moraga Way,A,,,
+
+HOA Member,HO - Jackie Schoeller,325 El Portal Way,A,,,
+
+HOA Member,HO - Kurt Schoeller ,325 El Portal Way,A,,,
+
+HOA Member,Luca Celada,325 El Portal Way,2014,,,
+
+HOA Member,Juliana Celada ,325 El Portal Way,2016,,,
+
+HOA Member,Addisyn Schoeller,325 El Portal Way,A,,,
+
+HOA Member,Emersyn Schoeller,325 El Portal Way,2009,,,
+
+HOA Member,Gracesyn Schoeller,325 El Portal Way,2014,,,
+
+HOA Member,HO - Chanh Phan,203 Castillon Way,A,,,
+
+HOA Member,HO - Vivian Vo,203 Castillon Way,A,,,
+
+HOA Member,Victoria Phan,203 Castillon Way,A,,,
+
+HOA Member,HO - John O'Byrne,278 Dondero Way,A,,,
+
+HOA Member,HO - Marina O'Byrne,278 Dondero Way,A,,,
+
+HOA Member,Matthieu O'Byrne,278 Dondero Way,2009,Note1,,
+
+HOA Member,Marc O'Byrne,278 Dondero Way,2012,Note2,,
+
+HOA Member,Lucie O'Byrne,278 Dondero Way,2015,,,
+
+HOA Member,HO - Lucia Jacobs,282 Sorrento Way,A,,,
+
+HOA Member,HO - John Jacobs,282 Sorrento Way,A,,,
+
+HOA Member,Joshua Jacobs,282 Sorrento Way,2004,,,
+
+HOA Member,Myles Jacobs,282 Sorrento Way,2003,,,
+
+HOA Member,HO - Amber Hale,205 Castillon Way,A,,,
+
+HOA Member,HO - Christopher Hale,205 Castillon Way,A,,,
+
+HOA Member,Olivia Hale,205 Castillon Way,2011,,,
+
+HOA Member,Dylan Hale,205 Castillon Way,2014,,,
+
+HOA Member,Eric Samson ,342 Viscaino Way,A,,,
+
+HOA Member,Mandy Samson ,342 Viscaino Way,A,,,
+
+Associate Member,AM - Russel Valdez,5972 Indian Avenue,A,,,
+
+Associate Member,AM - Shannon Drozen,5972 Indian Avenue,A,,,
+
+Associate Member,Franklin Valdez,5972 Indian Avenue,2009,,,
+
+Associate Member,Vivian Valdez,5972 Indian Avenue,2012,,,
+
+Associate Member,AM - Robert Moreno,270 Burning Tree Drive,A,,,
+
+Associate Member,AM - Joanne Park,270 Burning Tree Drive,A,,,
+
+Associate Member,Isabella Moreno,270 Burning Tree Drive,A,,,
+
+Associate Member,Joseph Moreno,270 Burning Tree Drive,2012,,,
+
+Associate Member,Sharon Moreno,270 Burning Tree Drive,A,,,Mother
+
+Associate Member,Bob Moreno,270 Burning Tree Drive,A,,,Father
+
+Associate Member,Swung Park,270 Burning Tree Drive,A,,,Parent
+
+Renter Member,RENTER - Debi Fennern,206 Castillon Way,A,,,
+
+Renter Member,RENTER - Owen Fennern,206 Castillon Way,A,,,
+
+Renter Member,Evan Fennern,206 Castillon Way,2007,,,
+
+Renter Member,Sadie Fennern,206 Castillon Way,2009,,,
+
+Renter Member,Luke Fennern,206 Castillon Way,2011,,,
+
+HOA Member,HO - Oleksandra Khrapachevska,288 Esteban Way,A,,,
+
+HOA Member,HO - Roman Morozov,288 Esteban Way,A,,,
+
+HOA Member,Olena Khrapachevska,288 Esteban Way,A,,,
+
+HOA Member,HO - Michael MacDonald,6313 Solano Drive,A,,,
+
+HOA Member,HO - Tegan Anderson,6313 Solano Drive,A,,,
+
+HOA Member,Morgan MacDonald,6313 Solano Drive,2002,,,
+
+HOA Member,Mackenzie MacDonald,6313 Solano Drive,2005,,,
+
+Associate Member,AM - Christie Moore,6513 Dade Court,A,,,
+
+Associate Member,Callie Moore,6513 Dade Court,2012,,,
+
+Associate Member,Kendra Moore,6513 Dade Court,2014,,,
+
+HOA Member,HO - Aravinth Nagamani Manickam,313 El Portal Way ,A,,,
+
+HOA Member,HO - Kaberi Majundar,313 El Portal Way ,A,,,
+
+HOA Member,HO - Ted Cano,285 Esteban Way,A,,,
+
+HOA Member,HO - Claire Cano,285 Esteban Way,A,,,
+
+HOA Member,HO - Raul Lopez,341 El Molino Way,A,,,
+
+HOA Member,HO - Rebecca Lopez,341 El Molino Way,A,,,
+
+HOA Member,Michael Lopez,341 El Molino Way,A,,,
+
+HOA Member,HO - David Williamson,6254 Purple Hills Drive,A,,,
+
+HOA Member,Lance McFarland,6254 Purple Hills Drive,A,,,Son
+
+HOA Member,Nisha McFarland,6254 Purple Hills Drive,A,,,DIL
+
+HOA Member,Jericho McFarland,6254 Purple Hills Drive,2011,,,Grandson
+
+Associate Member,AM - Amy Young,6456 Standridge Court,A,,,
+
+Associate Member,AM - Rich Young,6456 Standridge Court,A,,,
+
+Associate Member,Haley Young,6456 Standridge Court,2010,,,
+
+Associate Member,Hannah Young,6456 Standridge Court,2012,,,
+
+HOA Member,HO - Steve Darrow,318 Viscaino Way,A,,,
+
+HOA Member,HO - Cristina Darrow,318 Viscaino Way,A,,,
+
+HOA Member,Jeremy Darrow,318 Viscaino Way,2005,,,
+
+HOA Member,Hannah Darrow,318 Viscaino Way,2007,,,
+
+Associate Member,AM - Andrew Buck,6573 Korhummel Way,A,,,
+
+Associate Member,AM - Christina Buck,6573 Korhummel Way,A,,,
+
+Associate Member,Addison Buck,6573 Korhummel Way,2016,,,
+
+Associate Member,Cooper Buck,6573 Korhummel Way,2018,,,
+
+Associate Member,Isabelle Buck,6573 Korhummel Way,2021,,,
+
+HOA Member,HO - Odilio Vargas,6496 Purple Hills Drive,A,,,
+
+HOA Member,HO - Angelica Hernandez,6496 Purple Hills Drive,A,,,
+
+HOA Member,Hector Vargas,6496 Purple Hills Drive,2008,,,
+
+HOA Member,Marcus Vargas,6496 Purple Hills Drive,2008,,,
+
+HOA Member,HO - Jena Lenhardt,6305 Solano Drive,A,,,
+
+HOA Member,HO - Matt Lenhardt,6305 Solano Drive,A,,,
+
+HOA Member,Katherine Lenhardt,6305 Solano Drive,2017,,,
+
+HOA Member,Luke Lenhardt,6305 Solano Drive,2019,,,
+
+HOA Member,Grant Lenhardt,6305 Solano Drive,2021,,,
+
+Associate Member,AM - Nina De Simone ,507 Century Oaks Way,A,,,
+
+Associate Member,AM - Vito De Simone ,507 Century Oaks Way,A,,,
+
+Associate Member,Gianna De Simone ,507 Century Oaks Way,2011,,,
+
+Associate Member,Aila De Simone ,507 Century Oaks Way,2013,,,
+
+HOA Member,HO - Xiaotong Liu,6299 Camino Verde Drive,A,,,
+
+HOA Member,HO - Fang Liu,6299 Camino Verde Drive,A,,,
+
+HOA Member,Yuecheng Liu,6299 Camino Verde Drive,A,,,
+
+HOA Member,Ruiping Jie,6299 Camino Verde Drive,A,,,
+
+HOA Member,Jie Liu,6299 Camino Verde Drive,A,,,FIL
+
+HOA Member,Mingxia Feng,6299 Camino Verde Drive,A,,,MIL
+
+HOA Member,HO - Abhishek Solanki,6123 Del Robles Court,A,,,
+
+HOA Member,HO - Rupali Solanki,6123 Del Robles Court,A,,,
+
+HOA Member,Gauransh Solanki,6123 Del Robles Court,2010,,,
+
+HOA Member,Jeeva Solanki,6123 Del Robles Court,2019,,,
+
+Renter Member,RENTER - Ann Mabel Corona (Mabel),6258 Camino Verde,A,,,
+
+Renter Member,RENTER - Daniel Corona,6258 Camino Verde,A,,,
+
+Renter Member,Logan Corona,6258 Camino Verde,2011,,,
+
+Renter Member,Marleau Corona,6258 Camino Verde,2018,,,
+
+Associate Member,AM - Sarah Mize,6343 Mayo Drive,A,,,
+
+Associate Member,AM - Daniel Mize,6343 Mayo Drive,A,,,
+
+Associate Member,Olivia Mize,6343 Mayo Drive,2013,,,
+
+Associate Member,Cooper Mize,6343 Mayo Drive,2017,,,
+
+HOA Member,HO - Jennifer Fusilero,202 Castillon Way,A,,,
+
+HOA Member,HO - Frederick (Eric) Fusilero,202 Castillon Way,A,,,
+
+HOA Member,Ethan Fusilero,202 Castillon Way,A,,,
+
+HOA Member,Justin Fusilero,202 Castillon Way,A,,,
+
+HOA Member,Emery Fusilero,202 Castillon Way,A,,,
+
+HOA Member,HO - Saurav Talukdar,273 Dondero Way,A,,,
+
+HOA Member,HO - Mousumi Medhi,273 Dondero Way,A,,,
+
+HOA Member,Ranjan Das,273 Dondero Way,A,,,BIL
+
+HOA Member,Anamika Medhi,273 Dondero Way,A,,,Sister
+
+HOA Member,HO - Donna Davis King,283 El Portal Way,A,,,
+
+HOA Member,Kerry Harris Jr,283 El Portal Way,A,,,
+
+HOA Member,Travis Harris ,283 El Portal Way,A,,,
+
+HOA Member,HO - Kishore Jayachandran ,338 Bodega Way,A,,,
+
+HOA Member,HO - Priya Asokan,338 Bodega Way,A,,,
+
+HOA Member,Ishva kishore,338 Bodega Way,2011,,,
+
+HOA Member,Ishita kishore,338 Bodega Way,2015,,,
+
+HOA Member,HO - Yue Wang,6330 Solano Drive,A,,,
+
+HOA Member,HO - Zheng Chen,6330 Solano Drive,A,,,
+
+HOA Member,Sophia Chen,6330 Solano Drive,2007,,,
+
+HOA Member,Olivia Chen,6330 Solano Drive,2009,,,
+
+HOA Member,Liu Chen,6330 Solano Drive,A,,,MIL
+
+HOA Member,HO - Jun Wang,301 Los Pinos Way,A,,,
+
+HOA Member,HO - Rui Liu,301 Los Pinos Way,A,,,
+
+HOA Member,Muti Wang,301 Los Pinos Way,2014,,,
+
+HOA Member,Devin Wang,301 Los Pinos Way,2025,,,
+
+HOA Member,HO - Tracy Marr,6117 Escondido Court,A,,,
+
+HOA Member,HO - Jeff Marr,6117 Escondido Court,A,,,
+
+HOA Member,Brennen Marr,6117 Escondido Court,A,,,
+
+HOA Member,Aerin Marr,6117 Escondido Court,A,,,
+
+HOA Member,HO - Manish Madan,258 El Portal Way,A,,,
+
+HOA Member,HO - Priya Jana,258 El Portal Way,A,,,
+
+HOA Member,Ziva Madan,258 El Portal Way,2022,,,
+
+HOA Member,HO - Nikko Wright,307 Los Pinos Way,A,,,
+
+HOA Member,HO - Briana Ulloa-Wright,307 Los Pinos Way,A,,,
+
+HOA Member,HO - William Wolf,223 Purple Glen Drive,A,,,
+
+HOA Member,HO - Ellen Anderson,223 Purple Glen Drive,A,,,
+
+HOA Member,HO - John & Jacklyn Holtorf,318 Bodega Way,A,,,
+
+HOA Member,HO - Jacklyn Holtorf,318 Bodega Way,A,,,
+
+HOA Member,HO - Xinglie Ye,282 Cresta Vista Way,A,,,
+
+HOA Member,HO - Fei Wu,282 Cresta Vista Way,A,,,
+
+HOA Member,Colin Ye,282 Cresta Vista Way,2011,,,
+
+HOA Member,Cayden Ye,282 Cresta Vista Way,2015,,,
+
+HOA Member,HO - Artem Trytiak,277 Esteban Way,A,,,
+
+HOA Member,HO - Alona Trytiak,277 Esteban Way,A,,,
+
+HOA Member,Oleksandra Trytiak,277 Esteban Way,2011,,,
+
+HOA Member,HO - Liyong Cheng,6521 Catamaran Street,A,,,
+
+HOA Member,HO - Min Hu,6521 Catamaran Street,A,,,
+
+HOA Member,Calvin Cheng,6521 Catamaran Street,2011,,,
+
+HOA Member,Edwin Cheng,6521 Catamaran Street,2018,,,
+
+Associate Member,AM - Matthew Howard,6352 Felder Drive,A,,,check if only those w on current DS
+
+Associate Member,AM - Brianna Howard,6352 Felder Drive,A,,,
+
+HOA Member,HO - Jason Johnson ,6511 San Anselmo Way,A,,,
+
+HOA Member,Hunter Johnson ,6511 San Anselmo Way,A,,,
+
+HOA Member,Leland Johnson,6511 San Anselmo Way,A,,,
+
+HOA Member,Sadie Johnson,6511 San Anselmo Way,2012,,,
+
+HOA Member,Julia Johnson ,6511 San Anselmo Way,2012,,,
+
+HOA Member,HO - Frank Fales,265 Cresta Vista Way,A,,,
+
+HOA Member,HO - Mary Fales,265 Cresta Vista Way,A,,,
+
+Associate Member,AM - Mary Saca,6301 Malory Drive,A,,,
+
+Associate Member,AM - Gregory Saca,6301 Malory Drive,A,,,
+
+Associate Member,Samuel Saca,6301 Malory Drive,2012,,,

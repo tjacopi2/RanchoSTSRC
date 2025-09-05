@@ -62,7 +62,13 @@ public class MemberHTMLCreator {
 			writer.print(person.getName());
 			writer.print("</a>");
 			
-			notes = notes + "  " + person.getNotes();
+			if (person.getNotes() != null && person.getNotes().length()>0) {    // Is there a note attached to this person?
+				if (notes.length() == 0) {                                   // ..yes, is it the first note for the address?
+					notes = person.getNotes();                               // ..yes, so just use this note as the note
+				} else {
+					notes = notes + "<br>" + person.getNotes();              // There is already a note for this address so append it on a new line
+				}
+			}
 			//writer.print(HTMLSpace);writer.print(HTMLSpace);
 			
 			// Write the image tag if we have a new person
