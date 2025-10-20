@@ -30,11 +30,11 @@ class TestDataLoader {
 
 		List<File> logFiles = new ArrayList<File>();
 		DataLoader.FetchLogFiles(inputDirectory, logFiles);
-		Map<Integer, List<LogFileSummary>> logFileMap = DataLoader.LoadData(logFiles, new HashSet<String>()); 
+		Map<Integer, List<DaySummary>> logFileMap = DataLoader.LoadData(logFiles, new HashSet<String>()); 
 		
 		assertEquals(2, logFileMap.size());
 		
-		List<LogFileSummary> logFileList = logFileMap.get(2);
+		List<DaySummary> logFileList = logFileMap.get(2);
 		assertEquals(2, logFileList.size());
 		
 		assertEquals(25, logFileList.get(0).getDate().get(Calendar.DAY_OF_MONTH));

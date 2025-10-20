@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import loaders.LogFileSummary;
+import loaders.DaySummary;
 
 public class MonthHTMLGenerator {
 	
@@ -31,7 +31,7 @@ public class MonthHTMLGenerator {
 	}
 
 	@SuppressWarnings("unchecked")
-	public String generate(List<LogFileSummary> summaryList) {
+	public String generate(List<DaySummary> summaryList) {
 		int[] dayOfWeekHOAPeople = {0,0,0,0,0,0,0};
 		int[] dayOfWeekHOAGuests = {0,0,0,0,0,0,0};
 		int[] dayOfWeekAMPeople = {0,0,0,0,0,0,0};
@@ -51,7 +51,7 @@ public class MonthHTMLGenerator {
 		int firstDayOfMonth = gc.get(Calendar.DAY_OF_WEEK);
 		
 		// Put list of logFileSummaries into a map by day
-		Map<Integer, LogFileSummary> dayToSummary = createDayMap(summaryList);
+		Map<Integer, DaySummary> dayToSummary = createDayMap(summaryList);
 		
 		int dayNumber = 1;
 		int dayInWeek = 1;
@@ -75,7 +75,7 @@ public class MonthHTMLGenerator {
 				sb.append("  <tr>\n");   // start row
 			}
 
-			LogFileSummary summary = dayToSummary.get(dayNumber);
+			DaySummary summary = dayToSummary.get(dayNumber);
 			sb.append("<td><span class=\"date\">");
 			if (summary != null && summary.getHtmlDetailFile() != null) {
 				sb.append("<a href=\"./" + summary.getHtmlDetailFile().getName() + "\">");
@@ -133,17 +133,17 @@ public class MonthHTMLGenerator {
 		return templateData.replaceAll(DateTag, strDate).replace(StringDateTag, calendarTitle).replace(TableDataTag, sb.toString());
 	}
 	
-	public File generateOutputFilename(File outputDirectory, LogFileSummary summary) {
+	public File generateOutputFilename(File outputDirectory, DaySummary summary) {
 		SimpleDateFormat df = new SimpleDateFormat("MM-yyyy");
 		String strDate = df.format(summary.getDate().getTime());
 		
 		return new File(outputDirectory, TemplateHtmlFileName.replace(DateTag, strDate));
 	}
 	
-	protected Map<Integer, LogFileSummary> createDayMap(List<LogFileSummary> logFileSummaries) {
-		 Map<Integer, LogFileSummary> map = new HashMap<Integer, LogFileSummary>();
+	protected Map<Integer, DaySummary> createDayMap(List<DaySummary> logFileSummaries) {
+		 Map<Integer, DaySummary> map = new HashMap<Integer, DaySummary>();
 		 
-		 for (LogFileSummary summary : logFileSummaries) {
+		 for (DaySummary summary : logFileSummaries) {
 			 map.put(summary.getDate().get(Calendar.DAY_OF_MONTH), summary);
 		 }
 		 return map;

@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test;
 
 import loaders.AMLoader;
 import loaders.DataLoader;
-import loaders.LogFileSummary;
+import loaders.DaySummary;
 import utils.TestUtils;
 
 class TestMonthHTMLGenerator {
@@ -37,7 +37,7 @@ class TestMonthHTMLGenerator {
 		Set<String> amAddresses = AMLoader.LoadData(amInputDirectory);
 		List<File> logFiles = new ArrayList<File>();
 		DataLoader.FetchLogFiles(inputLogDirectory, logFiles);
-		Map<Integer, List<LogFileSummary>> logFileMap = DataLoader.LoadData(logFiles, amAddresses); 
+		Map<Integer, List<DaySummary>> logFileMap = DataLoader.LoadData(logFiles, amAddresses); 
 		
 		MonthHTMLGenerator monthGenerator = new MonthHTMLGenerator(inputTemplateFile, null);
 		
@@ -65,7 +65,7 @@ class TestMonthHTMLGenerator {
 		File inputTemplateFile = new File(inputDirectory, "monthHeader.html");
 		File inputLogFile = new File("testData\\TestDataAll\\log2021-03-17.csv");
 		Set<String> amAddresses = AMLoader.LoadData(amInputDirectory);
-		LogFileSummary summary = LogFileSummary.LoadFrom(inputLogFile, amAddresses);
+		DaySummary summary = DaySummary.LoadFrom(inputLogFile, amAddresses);
 
 		MonthHTMLGenerator monthGenerator = new MonthHTMLGenerator(inputTemplateFile, null);
 		
@@ -85,20 +85,20 @@ class TestMonthHTMLGenerator {
 		File inputLogDirectory = new File("testData\\TestDataAll");
 		List<File> logFiles = new ArrayList<File>();
 		DataLoader.FetchLogFiles(inputLogDirectory, logFiles);
-		Map<Integer, List<LogFileSummary>> logFileMap = DataLoader.LoadData(logFiles, new HashSet<String>()); 
+		Map<Integer, List<DaySummary>> logFileMap = DataLoader.LoadData(logFiles, new HashSet<String>()); 
 
-		List<LogFileSummary> marchList = logFileMap.get(3);
+		List<DaySummary> marchList = logFileMap.get(3);
 		assertNotNull(marchList);
 		assertEquals(3, marchList.size());
 		MonthHTMLGenerator monthGenerator = new MonthHTMLGenerator(inputTemplateFile, null);
 		
-		Map<Integer, LogFileSummary> dayToSummary = monthGenerator.createDayMap(marchList);
+		Map<Integer, DaySummary> dayToSummary = monthGenerator.createDayMap(marchList);
 		assertEquals(3, dayToSummary.size());
 		assertNotNull(dayToSummary.get(16));
 		assertNotNull(dayToSummary.get(17));
 		assertNotNull(dayToSummary.get(18));
 		
-		LogFileSummary summary = dayToSummary.get(16);
+		DaySummary summary = dayToSummary.get(16);
 		assertEquals(16, summary.getDate().get(Calendar.DAY_OF_MONTH));
 	}
 	

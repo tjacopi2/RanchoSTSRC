@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 
-import loaders.LogFileSummary;
-import loaders.LogFileSummary.Household;
+import loaders.DaySummary;
+import loaders.DaySummary.Household;
 
 public class DayHTMLGenerator {
 	
@@ -21,7 +21,7 @@ public class DayHTMLGenerator {
 		templateData = Files.readString(dayHTMLtemplate.toPath());
 	}
 
-	public String generate(LogFileSummary summary) {
+	public String generate(DaySummary summary) {
 		StringBuffer sb = new StringBuffer();
 		for (Household h : summary.getHouseholds()) {
 			sb.append("    <tr><td>");
@@ -50,7 +50,7 @@ public class DayHTMLGenerator {
 		return templateData.replaceAll(DateTag, strDate).replace(TableDataTag, sb.toString());
 	}
 	
-	public File generateOutputFilename(File outputDirectory, LogFileSummary summary) {
+	public File generateOutputFilename(File outputDirectory, DaySummary summary) {
 		SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy");
 		String strDate = df.format(summary.getDate().getTime());
 		

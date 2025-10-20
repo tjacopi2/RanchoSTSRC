@@ -14,16 +14,16 @@ import java.util.Set;
 
 public class DataLoader {
 	
-	public static Map<Integer, List<LogFileSummary>> LoadData(List<File> logFiles, Set<String> amAddresses) {
+	public static Map<Integer, List<DaySummary>> LoadData(List<File> logFiles, Set<String> amAddresses) {
 		int count = 0;
-		Map<Integer, List<LogFileSummary>> summaryMapByMonth = new HashMap<Integer, List<LogFileSummary>>();
+		Map<Integer, List<DaySummary>> summaryMapByMonth = new HashMap<Integer, List<DaySummary>>();
 		for (File f : logFiles) {
 			try {
-				LogFileSummary summary = LogFileSummary.LoadFrom(f, amAddresses);
+				DaySummary summary = DaySummary.LoadFrom(f, amAddresses);
 				Integer month = summary.getDate().get(Calendar.MONTH) + 1;
-				List<LogFileSummary> summaryList = summaryMapByMonth.get(month);
+				List<DaySummary> summaryList = summaryMapByMonth.get(month);
 				if (summaryList == null) {
-					summaryList = new ArrayList<LogFileSummary>();
+					summaryList = new ArrayList<DaySummary>();
 					summaryMapByMonth.put(month, summaryList);
 				}
 				
@@ -36,7 +36,7 @@ public class DataLoader {
 			
 		}
 		
-		for (List<LogFileSummary> monthValues : summaryMapByMonth.values()) {
+		for (List<DaySummary> monthValues : summaryMapByMonth.values()) {
 			Collections.sort(monthValues, new DateComparator());
 		}
 		
@@ -58,9 +58,9 @@ public class DataLoader {
 		}
 	}
 
-	public static class DateComparator implements Comparator<LogFileSummary> {
+	public static class DateComparator implements Comparator<DaySummary> {
 		@Override
-		public int compare(LogFileSummary o1, LogFileSummary o2) {
+		public int compare(DaySummary o1, DaySummary o2) {
 			int day1 = o1.getDate().get(Calendar.DAY_OF_MONTH);
 			int day2 = o2.getDate().get(Calendar.DAY_OF_MONTH);
 			if (day1 > day2) {

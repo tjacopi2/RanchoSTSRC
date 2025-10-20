@@ -20,7 +20,7 @@ import java.util.Set;
 
 import com.opencsv.CSVReader;
 
-public class LogFileSummary {
+public class DaySummary {
 	
     public static final String GUEST = "Guest_";
     
@@ -33,8 +33,8 @@ public class LogFileSummary {
 	private File htmlDetailFile = null;
 	private Map<Integer, Integer> entryHourMap = new HashMap<Integer, Integer>();
 	
-	public static LogFileSummary LoadFrom(File logFile, Set<String> amAddresses) throws IOException, ParseException {
-		LogFileSummary summary = new LogFileSummary();
+	public static DaySummary LoadFrom(File logFile, Set<String> amAddresses) throws IOException, ParseException {
+		DaySummary summary = new DaySummary();
 		Map<String, Household> householdMap = new HashMap<String, Household>();
 		
 	    CSVReader reader = new CSVReader(new FileReader(logFile));

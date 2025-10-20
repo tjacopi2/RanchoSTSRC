@@ -20,7 +20,7 @@ import org.junit.jupiter.api.Test;
 import generators.YearHTMLGenerator.YearSummaryData;
 import loaders.AMLoader;
 import loaders.DataLoader;
-import loaders.LogFileSummary;
+import loaders.DaySummary;
 import utils.TestUtils;
 
 class TestYearHTMLGenerator {
@@ -38,7 +38,7 @@ class TestYearHTMLGenerator {
 		Set<String> amAddresses = AMLoader.LoadData(amInputDirectory);
 		List<File> logFiles = new ArrayList<File>();
 		DataLoader.FetchLogFiles(inputLogDirectory, logFiles);
-		Map<Integer, List<LogFileSummary>> logFileMap = DataLoader.LoadData(logFiles, amAddresses); 
+		Map<Integer, List<DaySummary>> logFileMap = DataLoader.LoadData(logFiles, amAddresses); 
 		
 		YearHTMLGenerator yearGenerator = new YearHTMLGenerator(inputTemplateFile);
 		Map<Integer, File> dummyMonthHtmlMap = new HashMap<Integer, File>();
@@ -71,7 +71,7 @@ class TestYearHTMLGenerator {
 		File inputTemplateFile = new File(inputDirectory, "yearHeader.html");
 		File inputLogFile = new File("testData\\TestDataAll\\log2021-03-17.csv");
 		Set<String> amAddresses = AMLoader.LoadData(amInputDirectory);
-		LogFileSummary summary = LogFileSummary.LoadFrom(inputLogFile, amAddresses);
+		DaySummary summary = DaySummary.LoadFrom(inputLogFile, amAddresses);
 
 		YearHTMLGenerator yearGenerator = new YearHTMLGenerator(inputTemplateFile);
 		
@@ -93,9 +93,9 @@ class TestYearHTMLGenerator {
 		Set<String> amAddresses = AMLoader.LoadData(amInputDirectory);
 		List<File> logFiles = new ArrayList<File>();
 		DataLoader.FetchLogFiles(inputLogDirectory, logFiles);
-		Map<Integer, List<LogFileSummary>> logFileMap = DataLoader.LoadData(logFiles, amAddresses); 
+		Map<Integer, List<DaySummary>> logFileMap = DataLoader.LoadData(logFiles, amAddresses); 
 
-		List<LogFileSummary> marchList = logFileMap.get(3);
+		List<DaySummary> marchList = logFileMap.get(3);
 		assertNotNull(marchList);
 		assertEquals(3, marchList.size());
 		YearHTMLGenerator yearGenerator = new YearHTMLGenerator(inputTemplateFile);

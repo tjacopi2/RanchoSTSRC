@@ -13,7 +13,7 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 import loaders.AMLoader;
-import loaders.LogFileSummary;
+import loaders.DaySummary;
 import utils.TestUtils;
 
 class TestDayHTMLGenerator {
@@ -26,7 +26,7 @@ class TestDayHTMLGenerator {
 		File inputLogFile = new File("testData\\TestDataAll\\log2021-03-17.csv");
 		Set<String> amAddresses = AMLoader.LoadData(amInputDirectory);
 
-		LogFileSummary summary = LogFileSummary.LoadFrom(inputLogFile, amAddresses);
+		DaySummary summary = DaySummary.LoadFrom(inputLogFile, amAddresses);
 
 		DayHTMLGenerator dayGenerator = new DayHTMLGenerator(inputTemplateFile);
 		
@@ -58,7 +58,7 @@ class TestDayHTMLGenerator {
 		File inputTemplateFile = new File(inputDirectory, "dayHeader.html");
 		File inputLogFile = new File("testData\\TestDataAll\\log2021-03-17.csv");
 		Set<String> amAddresses = AMLoader.LoadData(amInputDirectory);
-		LogFileSummary summary = LogFileSummary.LoadFrom(inputLogFile, amAddresses);
+		DaySummary summary = DaySummary.LoadFrom(inputLogFile, amAddresses);
 
 		DayHTMLGenerator dayGenerator = new DayHTMLGenerator(inputTemplateFile);
 		

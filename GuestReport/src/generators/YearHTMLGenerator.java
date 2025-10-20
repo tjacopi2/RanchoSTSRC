@@ -9,7 +9,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
-import loaders.LogFileSummary;
+import loaders.DaySummary;
 
 public class YearHTMLGenerator {
 	
@@ -26,7 +26,7 @@ public class YearHTMLGenerator {
 		templateData = Files.readString(yearHTMLtemplate.toPath());
 	}
 
-	public String generate(Map<Integer, List<LogFileSummary>> logSummaryMap, Map<Integer, File> monthToFileMap) {
+	public String generate(Map<Integer, List<DaySummary>> logSummaryMap, Map<Integer, File> monthToFileMap) {
 		int year = -1;
 		String[] monthNames = new DateFormatSymbols().getMonths();
 		StringBuffer sb = new StringBuffer();
@@ -34,7 +34,7 @@ public class YearHTMLGenerator {
 		for (int i = 1; i<13; i++) {
 		//	sb.append("  <tr>\n");   // start row
 
-			List<LogFileSummary> monthLogRecords = logSummaryMap.get(i);
+			List<DaySummary> monthLogRecords = logSummaryMap.get(i);
 			if (monthLogRecords != null) {
 				sb.append("  <tr>\n");   // start row
 				if (year < 0) {
@@ -84,16 +84,16 @@ public class YearHTMLGenerator {
 		return templateData.replaceAll(DateTag, String.valueOf(year)).replace(TableDataTag, sb.toString());
 	}
 	
-	public File generateOutputFilename(File outputDirectory, LogFileSummary summary) {
+	public File generateOutputFilename(File outputDirectory, DaySummary summary) {
 		SimpleDateFormat df = new SimpleDateFormat("yyyy");
 		String strDate = df.format(summary.getDate().getTime());
 		
 		return new File(outputDirectory, TemplateHtmlFileName.replace(DateTag, strDate));
 	}
 	
-	protected YearSummaryData summerizeData(List<LogFileSummary> summaryList) {
+	protected YearSummaryData summerizeData(List<DaySummary> summaryList) {
 		YearSummaryData overallSummary = new YearSummaryData();
-		for (LogFileSummary logSummary : summaryList) {
+		for (DaySummary logSummary : summaryList) {
 			overallSummary.totalHOAMembers = overallSummary.totalHOAMembers + logSummary.getTotalHOA();
 			overallSummary.totalHOAGuests = overallSummary.totalHOAGuests + logSummary.getTotalHOAGuests();
 			overallSummary.totalAMMembers = overallSummary.totalAMMembers + logSummary.getTotalAM();

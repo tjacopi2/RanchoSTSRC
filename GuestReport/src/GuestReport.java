@@ -15,7 +15,7 @@ import generators.MonthHTMLGenerator;
 import generators.YearHTMLGenerator;
 import loaders.AMLoader;
 import loaders.DataLoader;
-import loaders.LogFileSummary;
+import loaders.DaySummary;
 
 public class GuestReport {
 	
@@ -75,15 +75,15 @@ public class GuestReport {
 		Set<String> amAddresses = AMLoader.LoadData(inputDirectory);
 		
 		// Generate individual day & month html files
-		LogFileSummary aSummary = null;
+		DaySummary aSummary = null;
 		Map<Integer, File> monthFileMap = new HashMap<Integer, File>();
-		Map<Integer, List<LogFileSummary>> logFileMap = DataLoader.LoadData(logFiles, amAddresses);
+		Map<Integer, List<DaySummary>> logFileMap = DataLoader.LoadData(logFiles, amAddresses);
 		DayHTMLGenerator dayGenerator = new DayHTMLGenerator(inputDayHeaderTemplateFile);
 		MonthGraphHTMLGenerator monthGraphGenerator = new MonthGraphHTMLGenerator(inputMonthGraphHeaderTemplateFile);
 		MonthHTMLGenerator monthGenerator = new MonthHTMLGenerator(inputMonthHeaderTemplateFile, monthGraphGenerator);
 		for (Integer month : logFileMap.keySet()) {
-			List<LogFileSummary> summaryList = logFileMap.get(month);
-			for (LogFileSummary summary : summaryList) {
+			List<DaySummary> summaryList = logFileMap.get(month);
+			for (DaySummary summary : summaryList) {
 				String html = dayGenerator.generate(summary);
 				File outputFile = dayGenerator.generateOutputFilename(outputDirectory, summary);
 				outputFile.delete();

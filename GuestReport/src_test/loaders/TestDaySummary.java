@@ -10,7 +10,7 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
-class TestLogFileSummary {
+class TestDaySummary {
 
 	@Test
 	void testLoadFrom() throws IOException, ParseException {
@@ -19,7 +19,7 @@ class TestLogFileSummary {
 		
 		File inputFile = new File("testData\\TestDataAll\\log2021-03-17.csv");
 
-		LogFileSummary summary = LogFileSummary.LoadFrom(inputFile, amAddresses);
+		DaySummary summary = DaySummary.LoadFrom(inputFile, amAddresses);
 		
 		assertEquals(20, summary.getTotalPeople());
 		assertEquals(16, summary.getTotalGuests());
