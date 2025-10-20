@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +15,6 @@ import generators.MonthHTMLGenerator;
 import generators.YearHTMLGenerator;
 import loaders.AMLoader;
 import loaders.DataLoader;
-import loaders.LogFileNameFilter;
 import loaders.LogFileSummary;
 
 public class GuestReport {
@@ -32,11 +32,14 @@ public class GuestReport {
                logDirectory = possibleLogDirectory;
 			}
 		}
-	    if (!logDirectory.isDirectory() || logDirectory.listFiles(new LogFileNameFilter()).length == 0) {
+		List<File> logFiles = new ArrayList<File>();
+		DataLoader.FetchLogFiles(logDirectory, logFiles);
+	    if (logFiles.size() == 0) {
 	    	System.err.println("Error.....no log files in directory " + logDirectory.getCanonicalPath());
 	    	System.exit(4);
 	    } else {
-	        System.out.println("Log directory: " + logDirectory.getCanonicalPath());	    	
+	        System.out.println("Log directory: " + logDirectory.getCanonicalPath());	 
+	        System.out.println("Have found " + logFiles.size() + " log files in directory and subdirectories.");	 
 	    }
 
 	    // Validate we can see the files in the input directory
@@ -74,7 +77,7 @@ public class GuestReport {
 		// Generate individual day & month html files
 		LogFileSummary aSummary = null;
 		Map<Integer, File> monthFileMap = new HashMap<Integer, File>();
-		Map<Integer, List<LogFileSummary>> logFileMap = DataLoader.LoadData(logDirectory, amAddresses);
+		Map<Integer, List<LogFileSummary>> logFileMap = DataLoader.LoadData(logFiles, amAddresses);
 		DayHTMLGenerator dayGenerator = new DayHTMLGenerator(inputDayHeaderTemplateFile);
 		MonthGraphHTMLGenerator monthGraphGenerator = new MonthGraphHTMLGenerator(inputMonthGraphHeaderTemplateFile);
 		MonthHTMLGenerator monthGenerator = new MonthHTMLGenerator(inputMonthHeaderTemplateFile, monthGraphGenerator);

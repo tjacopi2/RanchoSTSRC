@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +36,9 @@ class TestYearHTMLGenerator {
 		File inputLogDirectory = new File("testData\\TestDataAll");
 
 		Set<String> amAddresses = AMLoader.LoadData(amInputDirectory);
-		Map<Integer, List<LogFileSummary>> logFileMap = DataLoader.LoadData(inputLogDirectory, amAddresses); 
+		List<File> logFiles = new ArrayList<File>();
+		DataLoader.FetchLogFiles(inputLogDirectory, logFiles);
+		Map<Integer, List<LogFileSummary>> logFileMap = DataLoader.LoadData(logFiles, amAddresses); 
 		
 		YearHTMLGenerator yearGenerator = new YearHTMLGenerator(inputTemplateFile);
 		Map<Integer, File> dummyMonthHtmlMap = new HashMap<Integer, File>();
@@ -88,7 +91,9 @@ class TestYearHTMLGenerator {
 		
 		File inputLogDirectory = new File("testData\\TestDataAll");
 		Set<String> amAddresses = AMLoader.LoadData(amInputDirectory);
-		Map<Integer, List<LogFileSummary>> logFileMap = DataLoader.LoadData(inputLogDirectory, amAddresses); 
+		List<File> logFiles = new ArrayList<File>();
+		DataLoader.FetchLogFiles(inputLogDirectory, logFiles);
+		Map<Integer, List<LogFileSummary>> logFileMap = DataLoader.LoadData(logFiles, amAddresses); 
 
 		List<LogFileSummary> marchList = logFileMap.get(3);
 		assertNotNull(marchList);

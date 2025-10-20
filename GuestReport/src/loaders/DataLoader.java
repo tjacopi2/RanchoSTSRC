@@ -14,10 +14,10 @@ import java.util.Set;
 
 public class DataLoader {
 	
-	public static Map<Integer, List<LogFileSummary>> LoadData(File inputDirectory, Set<String> amAddresses) {
+	public static Map<Integer, List<LogFileSummary>> LoadData(List<File> logFiles, Set<String> amAddresses) {
 		int count = 0;
 		Map<Integer, List<LogFileSummary>> summaryMapByMonth = new HashMap<Integer, List<LogFileSummary>>();
-		for (File f : inputDirectory.listFiles(new LogFileNameFilter())) {
+		for (File f : logFiles) {
 			try {
 				LogFileSummary summary = LogFileSummary.LoadFrom(f, amAddresses);
 				Integer month = summary.getDate().get(Calendar.MONTH) + 1;
@@ -43,6 +43,19 @@ public class DataLoader {
 		System.out.println("Successfully read " + count + " log files");
 		
 		return summaryMapByMonth;
+	}
+
+	// Recursively search to find all possible log files
+	public static void FetchLogFiles(File inputDirectory, List<File> logFiles) {
+		for (File f : inputDirectory.listFiles()) {
+			if (f.isDirectory()) {
+				FetchLogFiles(f, logFiles);
+			} else {
+				if (f.getName().toLowerCase().startsWith("log") && f.getName().toLowerCase().endsWith(".csv")) {
+					logFiles.add(f);
+				}
+			}
+		}
 	}
 
 	public static class DateComparator implements Comparator<LogFileSummary> {

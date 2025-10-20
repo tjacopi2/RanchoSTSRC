@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
@@ -13,12 +14,23 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 class TestDataLoader {
+	
+	@Test
+	void testFetchLogFiles() throws IOException, ParseException {
+		File inputDirectory = new File("testData\\TestDataLogFilesSubdirectories");
+
+		List<File> logFiles = new ArrayList<File>();
+		DataLoader.FetchLogFiles(inputDirectory, logFiles);
+		assertEquals(4, logFiles.size(), "Unexpected number of log files found");
+	}
 
 	@Test
 	void testLoadFrom() throws IOException, ParseException {
 		File inputDirectory = new File("testData\\TestDataAll");
 
-		Map<Integer, List<LogFileSummary>> logFileMap = DataLoader.LoadData(inputDirectory, new HashSet<String>()); 
+		List<File> logFiles = new ArrayList<File>();
+		DataLoader.FetchLogFiles(inputDirectory, logFiles);
+		Map<Integer, List<LogFileSummary>> logFileMap = DataLoader.LoadData(logFiles, new HashSet<String>()); 
 		
 		assertEquals(2, logFileMap.size());
 		
