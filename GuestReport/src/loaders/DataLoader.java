@@ -109,7 +109,7 @@ public class DataLoader {
 			if (f.isDirectory()) {
 				FetchLogFiles(f, logFiles);
 			} else {
-				if (f.getName().toLowerCase().startsWith("log") && f.getName().toLowerCase().endsWith(".csv")) {
+				if (f.getName().toLowerCase().endsWith(".csv")) {
 					logFiles.add(f);
 				}
 			}

@@ -113,5 +113,39 @@ class TestDataLoader {
 		assertEquals(20, monthToDaySummaryMap.get(18).getEntryHourMap().get(7));
 	
 	}
+	
+
+	@Test
+	void testLoadFromCombinedLogFile() throws IOException, ParseException {
+		File inputDirectory = new File("testData\\TestDataCombinedLogFile");
+
+		List<File> logFiles = new ArrayList<File>();
+		DataLoader.FetchLogFiles(inputDirectory, logFiles);
+		Map<Integer, Map<Integer, DaySummary>> monthToDayMap = DataLoader.LoadData(logFiles, new HashSet<String>()); 
+		
+		assertEquals(2, monthToDayMap.size());    // Should have two months of data
+		
+		Map<Integer, DaySummary> monthToDaySummaryMap = monthToDayMap.get(2);   // Get Feburary data
+		assertEquals(2, monthToDaySummaryMap.size());                           // Should have two days in Feb
+		
+		assertEquals(25, monthToDaySummaryMap.get(25).getDate().get(Calendar.DAY_OF_MONTH));
+		assertEquals(9, monthToDaySummaryMap.get(25).getTotalPeople());
+		assertEquals(26, monthToDaySummaryMap.get(26).getDate().get(Calendar.DAY_OF_MONTH));
+		assertEquals(16, monthToDaySummaryMap.get(26).getTotalPeople());
+		
+		monthToDaySummaryMap = monthToDayMap.get(3);    // Now get march data
+		assertEquals(3, monthToDaySummaryMap.size());
+		
+		assertEquals(16, monthToDaySummaryMap.get(16).getDate().get(Calendar.DAY_OF_MONTH));
+		assertEquals(2, monthToDaySummaryMap.get(16).getTotalPeople());
+		assertEquals(1, monthToDaySummaryMap.get(16).getEntryHourMap().get(9));
+		assertEquals(1, monthToDaySummaryMap.get(16).getEntryHourMap().get(16));
+		assertEquals(17, monthToDaySummaryMap.get(17).getDate().get(Calendar.DAY_OF_MONTH));
+		assertEquals(20, monthToDaySummaryMap.get(17).getTotalPeople());
+		assertEquals(18, monthToDaySummaryMap.get(18).getDate().get(Calendar.DAY_OF_MONTH));
+		assertEquals(20, monthToDaySummaryMap.get(18).getTotalPeople());
+		assertEquals(20, monthToDaySummaryMap.get(18).getEntryHourMap().get(7));
+	
+	}
 
 }
