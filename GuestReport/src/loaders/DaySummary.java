@@ -1,94 +1,25 @@
 package loaders;
 
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import com.opencsv.CSVReader;
 
 public class DaySummary {
 	
-    public static final String GUEST = "Guest_";
-    
 	private GregorianCalendar date = null;
 	private int totalPeople = 0;
 	private int totalGuests = 0;
 	private int totalAM = 0;
 	private int totalAMGuests = 0;
-	private List<Household> households = new ArrayList<Household>();
+	private Map<String, Household> households = new HashMap<String, Household>();
 	private File htmlDetailFile = null;
 	private Map<Integer, Integer> entryHourMap = new HashMap<Integer, Integer>();
 	
-	public static DaySummary LoadFrom(File logFile, Set<String> amAddresses) throws IOException, ParseException {
-		DaySummary summary = new DaySummary();
-		Map<String, Household> householdMap = new HashMap<String, Household>();
-		
-	    CSVReader reader = new CSVReader(new FileReader(logFile));
-	    Iterator<String[]> iter = reader.iterator();
-    	while (iter.hasNext()) {
-			String[] values = iter.next();
-			if (values.length >= 3) {
-				String strDate = values[0];
-    			DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				Date date2 = df.parse(strDate);
-				GregorianCalendar gc = new GregorianCalendar();
-				gc.setTime(date2);
-				if (summary.date == null) {
-					summary.date = gc;
-				}
-
-				Integer entryHour = gc.get(Calendar.HOUR_OF_DAY);
-				Integer currentCount = summary.entryHourMap.get(entryHour);
-				if (currentCount != null) {
-					summary.entryHourMap.put(entryHour, currentCount + 1);
-				} else {
-					summary.entryHourMap.put(entryHour, 1);
-				}
-				
-				String address = values[1];
-				Household h = householdMap.get(address);
-				if (h == null) {
-					h = new Household();
-					h.setAddress(address);
-					householdMap.put(address, h);
-				}
-				if (values[2] != null && values[2].startsWith(GUEST)) {
-					h.guests++;
-				}
-				h.people++;
-			}
-    	}
-    	reader.close();
-    	
-    	for (Household h : householdMap.values()) {
-    		summary.households.add(h);
-    		summary.totalGuests = summary.totalGuests + h.guests;
-    		summary.totalPeople = summary.totalPeople + h.people;
-    		if (amAddresses.contains(h.getAddress())) {
-    			summary.totalAM = summary.totalAM + h.people;
-    			summary.totalAMGuests = summary.totalAMGuests + h.guests;
-    			h.setAmHousehold(true);
-    		}
-    	}
-    	
-    	Collections.sort(summary.households, new HouseholdComparator());  	
-		return summary;
-		
-	}
 	
 	public GregorianCalendar getDate() {
 		return date;
@@ -114,14 +45,17 @@ public class DaySummary {
 		this.totalGuests = totalGuests;
 	}
 
-	public List<Household> getHouseholds() {
+	public Map<String, Household> getHouseholds() {
 		return households;
 	}
 
-	public void setHouseholds(List<Household> households) {
-		this.households = households;
+	public List<Household> getHouseholdsList() {
+		List<Household> householdList = new ArrayList<Household>();
+		householdList.addAll(households.values());
+		Collections.sort(householdList, new HouseholdComparator());  	
+		return householdList;
 	}
-
+	
 	public File getHtmlDetailFile() {
 		return htmlDetailFile;
 	}
@@ -136,6 +70,14 @@ public class DaySummary {
 
 	public int getTotalAMGuests() {
 		return totalAMGuests;
+	}
+	
+	public int setTotalAM(int newAM) {
+		return totalAM = newAM;
+	}
+
+	public int setTotalAMGuests(int newAMGuests) {
+		return totalAMGuests = newAMGuests;
 	}
 	
 	public int getTotalHOA() {

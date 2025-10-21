@@ -6,7 +6,6 @@ import java.nio.file.Files;
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Map;
 
 import loaders.DaySummary;
@@ -26,7 +25,7 @@ public class YearHTMLGenerator {
 		templateData = Files.readString(yearHTMLtemplate.toPath());
 	}
 
-	public String generate(Map<Integer, List<DaySummary>> logSummaryMap, Map<Integer, File> monthToFileMap) {
+	public String generate(Map<Integer, Map<Integer, DaySummary>> logSummaryMap, Map<Integer, File> monthToFileMap) {
 		int year = -1;
 		String[] monthNames = new DateFormatSymbols().getMonths();
 		StringBuffer sb = new StringBuffer();
@@ -34,11 +33,11 @@ public class YearHTMLGenerator {
 		for (int i = 1; i<13; i++) {
 		//	sb.append("  <tr>\n");   // start row
 
-			List<DaySummary> monthLogRecords = logSummaryMap.get(i);
+			Map<Integer, DaySummary> monthLogRecords = logSummaryMap.get(i);
 			if (monthLogRecords != null) {
 				sb.append("  <tr>\n");   // start row
 				if (year < 0) {
-					year = monthLogRecords.get(0).getDate().get(Calendar.YEAR);
+					year = monthLogRecords.values().iterator().next().getDate().get(Calendar.YEAR);
 				}
 				YearSummaryData overallSummary = summerizeData(monthLogRecords);
 				
@@ -91,9 +90,9 @@ public class YearHTMLGenerator {
 		return new File(outputDirectory, TemplateHtmlFileName.replace(DateTag, strDate));
 	}
 	
-	protected YearSummaryData summerizeData(List<DaySummary> summaryList) {
+	protected YearSummaryData summerizeData(Map<Integer, DaySummary> summaryMap) {
 		YearSummaryData overallSummary = new YearSummaryData();
-		for (DaySummary logSummary : summaryList) {
+		for (DaySummary logSummary : summaryMap.values()) {
 			overallSummary.totalHOAMembers = overallSummary.totalHOAMembers + logSummary.getTotalHOA();
 			overallSummary.totalHOAGuests = overallSummary.totalHOAGuests + logSummary.getTotalHOAGuests();
 			overallSummary.totalAMMembers = overallSummary.totalAMMembers + logSummary.getTotalAM();

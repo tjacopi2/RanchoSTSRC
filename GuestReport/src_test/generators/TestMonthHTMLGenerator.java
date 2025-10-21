@@ -10,9 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -37,11 +35,13 @@ class TestMonthHTMLGenerator {
 		Set<String> amAddresses = AMLoader.LoadData(amInputDirectory);
 		List<File> logFiles = new ArrayList<File>();
 		DataLoader.FetchLogFiles(inputLogDirectory, logFiles);
-		Map<Integer, List<DaySummary>> logFileMap = DataLoader.LoadData(logFiles, amAddresses); 
+		Map<Integer, Map<Integer, DaySummary>> logFileMap = DataLoader.LoadData(logFiles, amAddresses); 
+		Map<Integer, DaySummary> marchData = logFileMap.get(3);
+		assertNotNull(marchData, "Could not find data for March");
 		
 		MonthHTMLGenerator monthGenerator = new MonthHTMLGenerator(inputTemplateFile, null);
 		
-		String html = monthGenerator.generate(logFileMap.get(3));    // Use march
+		String html = monthGenerator.generate(marchData);    // Use march
 		
 		File outputFile = new File("testData\\output\\TestMonthHTMLGenerator.html");
 		outputFile.delete();
@@ -65,7 +65,13 @@ class TestMonthHTMLGenerator {
 		File inputTemplateFile = new File(inputDirectory, "monthHeader.html");
 		File inputLogFile = new File("testData\\TestDataAll\\log2021-03-17.csv");
 		Set<String> amAddresses = AMLoader.LoadData(amInputDirectory);
-		DaySummary summary = DaySummary.LoadFrom(inputLogFile, amAddresses);
+		
+		Map<Integer, Map<Integer, DaySummary>> summaryMapByMonth = new HashMap<Integer, Map<Integer, DaySummary>>();
+		DataLoader.LoadFile(amAddresses, summaryMapByMonth, inputLogFile);
+		Map<Integer, DaySummary> monthSummaryMap = summaryMapByMonth.get(3);
+		assertNotNull(monthSummaryMap, "Could not find data for March");
+		DaySummary summary = monthSummaryMap.get(17);
+		assertNotNull(summary, "Could not find data for the 17th of March");
 
 		MonthHTMLGenerator monthGenerator = new MonthHTMLGenerator(inputTemplateFile, null);
 		
@@ -74,32 +80,6 @@ class TestMonthHTMLGenerator {
 		assertTrue(outputFile.getName().startsWith("month"));
 		assertTrue(outputFile.getName().endsWith(".html"));
 		
-	}
-	
-
-	@Test
-	void testCreateDayMap() throws IOException, ParseException {
-		File inputDirectory = new File("input\\");
-		File inputTemplateFile = new File(inputDirectory, "monthHeader.html");
-		
-		File inputLogDirectory = new File("testData\\TestDataAll");
-		List<File> logFiles = new ArrayList<File>();
-		DataLoader.FetchLogFiles(inputLogDirectory, logFiles);
-		Map<Integer, List<DaySummary>> logFileMap = DataLoader.LoadData(logFiles, new HashSet<String>()); 
-
-		List<DaySummary> marchList = logFileMap.get(3);
-		assertNotNull(marchList);
-		assertEquals(3, marchList.size());
-		MonthHTMLGenerator monthGenerator = new MonthHTMLGenerator(inputTemplateFile, null);
-		
-		Map<Integer, DaySummary> dayToSummary = monthGenerator.createDayMap(marchList);
-		assertEquals(3, dayToSummary.size());
-		assertNotNull(dayToSummary.get(16));
-		assertNotNull(dayToSummary.get(17));
-		assertNotNull(dayToSummary.get(18));
-		
-		DaySummary summary = dayToSummary.get(16);
-		assertEquals(16, summary.getDate().get(Calendar.DAY_OF_MONTH));
 	}
 	
 

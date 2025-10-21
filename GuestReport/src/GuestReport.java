@@ -77,13 +77,13 @@ public class GuestReport {
 		// Generate individual day & month html files
 		DaySummary aSummary = null;
 		Map<Integer, File> monthFileMap = new HashMap<Integer, File>();
-		Map<Integer, List<DaySummary>> logFileMap = DataLoader.LoadData(logFiles, amAddresses);
+		Map<Integer, Map<Integer, DaySummary>> logFileMap = DataLoader.LoadData(logFiles, amAddresses);
 		DayHTMLGenerator dayGenerator = new DayHTMLGenerator(inputDayHeaderTemplateFile);
 		MonthGraphHTMLGenerator monthGraphGenerator = new MonthGraphHTMLGenerator(inputMonthGraphHeaderTemplateFile);
 		MonthHTMLGenerator monthGenerator = new MonthHTMLGenerator(inputMonthHeaderTemplateFile, monthGraphGenerator);
 		for (Integer month : logFileMap.keySet()) {
-			List<DaySummary> summaryList = logFileMap.get(month);
-			for (DaySummary summary : summaryList) {
+			Map<Integer, DaySummary> dayOfMonthSummaryMap = logFileMap.get(month);
+			for (DaySummary summary : dayOfMonthSummaryMap.values()) {
 				String html = dayGenerator.generate(summary);
 				File outputFile = dayGenerator.generateOutputFilename(outputDirectory, summary);
 				outputFile.delete();
@@ -93,8 +93,9 @@ public class GuestReport {
 					aSummary = summary;
 				}
 			}
-			String monthHtml = monthGenerator.generate(summaryList);
-			File outputMonthFile = monthGenerator.generateOutputFilename(outputDirectory, summaryList.get(0));
+			String monthHtml = monthGenerator.generate(dayOfMonthSummaryMap);
+			DaySummary anyDaySummary = dayOfMonthSummaryMap.values().iterator().next();
+			File outputMonthFile = monthGenerator.generateOutputFilename(outputDirectory, anyDaySummary);
 			outputMonthFile.delete();
 			Files.writeString(outputMonthFile.toPath(), monthHtml, StandardOpenOption.CREATE);
 			monthFileMap.put(month, outputMonthFile);

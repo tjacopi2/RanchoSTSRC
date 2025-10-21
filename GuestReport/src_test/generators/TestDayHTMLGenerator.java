@@ -7,12 +7,15 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.text.ParseException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
 import loaders.AMLoader;
+import loaders.DataLoader;
 import loaders.DaySummary;
 import utils.TestUtils;
 
@@ -26,7 +29,12 @@ class TestDayHTMLGenerator {
 		File inputLogFile = new File("testData\\TestDataAll\\log2021-03-17.csv");
 		Set<String> amAddresses = AMLoader.LoadData(amInputDirectory);
 
-		DaySummary summary = DaySummary.LoadFrom(inputLogFile, amAddresses);
+		Map<Integer, Map<Integer, DaySummary>> summaryMapByMonth = new HashMap<Integer, Map<Integer, DaySummary>>();
+		DataLoader.LoadFile(amAddresses, summaryMapByMonth, inputLogFile);
+		Map<Integer, DaySummary> monthSummaryMap = summaryMapByMonth.get(3);
+		assertNotNull(monthSummaryMap, "Could not find data for March");
+		DaySummary summary = monthSummaryMap.get(17);
+		assertNotNull(summary, "Could not find data for the 17th of March");
 
 		DayHTMLGenerator dayGenerator = new DayHTMLGenerator(inputTemplateFile);
 		
@@ -58,7 +66,13 @@ class TestDayHTMLGenerator {
 		File inputTemplateFile = new File(inputDirectory, "dayHeader.html");
 		File inputLogFile = new File("testData\\TestDataAll\\log2021-03-17.csv");
 		Set<String> amAddresses = AMLoader.LoadData(amInputDirectory);
-		DaySummary summary = DaySummary.LoadFrom(inputLogFile, amAddresses);
+		
+		Map<Integer, Map<Integer, DaySummary>> summaryMapByMonth = new HashMap<Integer, Map<Integer, DaySummary>>();
+		DataLoader.LoadFile(amAddresses, summaryMapByMonth, inputLogFile);
+		Map<Integer, DaySummary> monthSummaryMap = summaryMapByMonth.get(3);
+		assertNotNull(monthSummaryMap, "Could not find data for March");
+		DaySummary summary = monthSummaryMap.get(17);
+		assertNotNull(summary, "Could not find data for the 17th of March");
 
 		DayHTMLGenerator dayGenerator = new DayHTMLGenerator(inputTemplateFile);
 		

@@ -38,14 +38,15 @@ class TestYearHTMLGenerator {
 		Set<String> amAddresses = AMLoader.LoadData(amInputDirectory);
 		List<File> logFiles = new ArrayList<File>();
 		DataLoader.FetchLogFiles(inputLogDirectory, logFiles);
-		Map<Integer, List<DaySummary>> logFileMap = DataLoader.LoadData(logFiles, amAddresses); 
+		
+		Map<Integer, Map<Integer, DaySummary>> summaryMapByMonth = DataLoader.LoadData(logFiles, amAddresses);
 		
 		YearHTMLGenerator yearGenerator = new YearHTMLGenerator(inputTemplateFile);
 		Map<Integer, File> dummyMonthHtmlMap = new HashMap<Integer, File>();
 		dummyMonthHtmlMap.put(2, new File(DummyMonthFileName1));
 		dummyMonthHtmlMap.put(3, new File(DummyMonthFileName2));
 		
-		String html = yearGenerator.generate(logFileMap, dummyMonthHtmlMap);  
+		String html = yearGenerator.generate(summaryMapByMonth, dummyMonthHtmlMap);  
 		
 		File outputFile = new File("testData\\output\\TestYearHTMLGenerator.html");
 		outputFile.delete();
@@ -71,7 +72,13 @@ class TestYearHTMLGenerator {
 		File inputTemplateFile = new File(inputDirectory, "yearHeader.html");
 		File inputLogFile = new File("testData\\TestDataAll\\log2021-03-17.csv");
 		Set<String> amAddresses = AMLoader.LoadData(amInputDirectory);
-		DaySummary summary = DaySummary.LoadFrom(inputLogFile, amAddresses);
+		
+		Map<Integer, Map<Integer, DaySummary>> summaryMapByMonth = new HashMap<Integer, Map<Integer, DaySummary>>();
+		DataLoader.LoadFile(amAddresses, summaryMapByMonth, inputLogFile);
+		Map<Integer, DaySummary> monthSummaryMap = summaryMapByMonth.get(3);
+		assertNotNull(monthSummaryMap, "Could not find data for March");
+		DaySummary summary = monthSummaryMap.get(17);
+		assertNotNull(summary, "Could not find data for the 17th of March");
 
 		YearHTMLGenerator yearGenerator = new YearHTMLGenerator(inputTemplateFile);
 		
@@ -93,14 +100,15 @@ class TestYearHTMLGenerator {
 		Set<String> amAddresses = AMLoader.LoadData(amInputDirectory);
 		List<File> logFiles = new ArrayList<File>();
 		DataLoader.FetchLogFiles(inputLogDirectory, logFiles);
-		Map<Integer, List<DaySummary>> logFileMap = DataLoader.LoadData(logFiles, amAddresses); 
+		Map<Integer, Map<Integer, DaySummary>> summaryMapByMonth = DataLoader.LoadData(logFiles, amAddresses);
+		
 
-		List<DaySummary> marchList = logFileMap.get(3);
-		assertNotNull(marchList);
-		assertEquals(3, marchList.size());
+		Map<Integer, DaySummary> marchData = summaryMapByMonth.get(3);
+		assertNotNull(marchData);
+		assertEquals(3, marchData.size());
 		YearHTMLGenerator yearGenerator = new YearHTMLGenerator(inputTemplateFile);
 		
-		YearSummaryData summaryData = yearGenerator.summerizeData(marchList);
+		YearSummaryData summaryData = yearGenerator.summerizeData(marchData);
 		assertEquals(40, summaryData.totalHOAMembers);
 		assertEquals(36, summaryData.totalHOAGuests);
 		assertEquals(2, summaryData.totalAMMembers);

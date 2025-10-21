@@ -1,33 +1,35 @@
 package loaders;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.ParseException;
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.opencsv.CSVReader;
+
+import loaders.DaySummary.Household;
+
 public class DataLoader {
-	
-	public static Map<Integer, List<DaySummary>> LoadData(List<File> logFiles, Set<String> amAddresses) {
+    public static final String GUEST = "Guest_";
+	 
+	public static Map<Integer, Map<Integer, DaySummary>> LoadData(List<File> logFiles, Set<String> amAddresses) {
 		int count = 0;
-		Map<Integer, List<DaySummary>> summaryMapByMonth = new HashMap<Integer, List<DaySummary>>();
+		Map<Integer, Map<Integer, DaySummary>> summaryMapByMonth = new HashMap<Integer, Map<Integer, DaySummary>>();
 		for (File f : logFiles) {
 			try {
-				DaySummary summary = DaySummary.LoadFrom(f, amAddresses);
-				Integer month = summary.getDate().get(Calendar.MONTH) + 1;
-				List<DaySummary> summaryList = summaryMapByMonth.get(month);
-				if (summaryList == null) {
-					summaryList = new ArrayList<DaySummary>();
-					summaryMapByMonth.put(month, summaryList);
-				}
-				
-				summaryList.add(summary);
+				LoadFile(amAddresses, summaryMapByMonth, f);
 				count++;
 			} catch (IOException | ParseException e) {
 				System.err.println("Skipping log file " + f.getAbsolutePath());
@@ -35,14 +37,76 @@ public class DataLoader {
 			}
 			
 		}
-		
-		for (List<DaySummary> monthValues : summaryMapByMonth.values()) {
-			Collections.sort(monthValues, new DateComparator());
-		}
-		
+					
 		System.out.println("Successfully read " + count + " log files");
 		
 		return summaryMapByMonth;
+	}
+
+	public static void LoadFile(Set<String> amAddresses, Map<Integer, Map<Integer, DaySummary>> summaryMapByMonth,
+			File logFile) throws FileNotFoundException, ParseException, IOException {
+		// Read the log file
+		CSVReader reader = new CSVReader(new FileReader(logFile));
+		Iterator<String[]> iter = reader.iterator();
+		while (iter.hasNext()) {
+			String[] values = iter.next();
+			if (values.length >= 3) {
+				String strDate = values[0];
+				DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				Date date2 = df.parse(strDate);
+				GregorianCalendar gc = new GregorianCalendar();
+				gc.setTime(date2);
+				
+				// Is this the first time we have seen this month?
+				Integer month = gc.get(Calendar.MONTH) + 1;
+				Map<Integer, DaySummary> monthSummaryMap = summaryMapByMonth.get(month);
+				if (monthSummaryMap == null) {
+					monthSummaryMap = new HashMap<Integer, DaySummary>();
+					summaryMapByMonth.put(month, monthSummaryMap);
+				}
+				
+				// Is this the first time we have seen this day in the month?
+				Integer day = gc.get(Calendar.DAY_OF_MONTH);
+				DaySummary daySummary = monthSummaryMap.get(day);
+				if (daySummary == null ) {
+					daySummary = new DaySummary();
+					daySummary.setDate(gc);
+					monthSummaryMap.put(day, daySummary);
+				}
+				
+				Integer entryHour = gc.get(Calendar.HOUR_OF_DAY);
+				Integer currentCount = daySummary.getEntryHourMap().get(entryHour);
+				if (currentCount != null) {
+					daySummary.getEntryHourMap().put(entryHour, currentCount + 1);
+				} else {
+					daySummary.getEntryHourMap().put(entryHour, 1);
+				}
+				
+				String address = values[1];
+				Household h = daySummary.getHouseholds().get(address);
+				if (h == null) {
+					h = new Household();
+					h.setAddress(address);
+					if (amAddresses.contains(address)) {
+		    			h.setAmHousehold(true);
+		    		}
+					daySummary.getHouseholds().put(address, h);
+				}
+				if (values[2] != null && values[2].startsWith(GUEST)) {
+					h.setGuests(h.getGuests() + 1);
+					daySummary.setTotalGuests(daySummary.getTotalGuests() + 1);
+					if (h.isAmHousehold()) {
+		    			daySummary.setTotalAMGuests(daySummary.getTotalAMGuests() + 1);
+		    		}
+				}
+				h.setPeople(h.getPeople() + 1);
+				daySummary.setTotalPeople(daySummary.getTotalPeople() + 1);
+				if (h.isAmHousehold()) {
+					daySummary.setTotalAM(daySummary.getTotalAM() + 1);
+				}
+			}
+		}
+		reader.close();
 	}
 
 	// Recursively search to find all possible log files

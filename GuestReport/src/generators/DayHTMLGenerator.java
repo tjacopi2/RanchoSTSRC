@@ -23,7 +23,7 @@ public class DayHTMLGenerator {
 
 	public String generate(DaySummary summary) {
 		StringBuffer sb = new StringBuffer();
-		for (Household h : summary.getHouseholds()) {
+		for (Household h : summary.getHouseholdsList()) {
 			sb.append("    <tr><td>");
 			sb.append(h.getAddress());
 			if (h.isAmHousehold()) {

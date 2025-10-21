@@ -8,7 +8,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import loaders.DaySummary;
@@ -31,7 +30,7 @@ public class MonthHTMLGenerator {
 	}
 
 	@SuppressWarnings("unchecked")
-	public String generate(List<DaySummary> summaryList) {
+	public String generate(Map<Integer, DaySummary> dayToSummary) {
 		int[] dayOfWeekHOAPeople = {0,0,0,0,0,0,0};
 		int[] dayOfWeekHOAGuests = {0,0,0,0,0,0,0};
 		int[] dayOfWeekAMPeople = {0,0,0,0,0,0,0};
@@ -42,8 +41,9 @@ public class MonthHTMLGenerator {
 				new HashMap<Integer, Integer>(), new HashMap<Integer, Integer>(), new HashMap<Integer, Integer>()
 		};
 		
-		int month = summaryList.get(0).getDate().get(Calendar.MONTH);
-		int year = summaryList.get(0).getDate().get(Calendar.YEAR);
+		GregorianCalendar date = dayToSummary.values().iterator().next().getDate();
+		int month = date.get(Calendar.MONTH);
+		int year = date.get(Calendar.YEAR);
 
 		// Calculate when first day of month is
 		// create calendar at day 1 to find which day the month starts.
@@ -51,7 +51,7 @@ public class MonthHTMLGenerator {
 		int firstDayOfMonth = gc.get(Calendar.DAY_OF_WEEK);
 		
 		// Put list of logFileSummaries into a map by day
-		Map<Integer, DaySummary> dayToSummary = createDayMap(summaryList);
+		//Map<Integer, DaySummary> dayToSummary = createDayMap(summaryList);
 		
 		int dayNumber = 1;
 		int dayInWeek = 1;
@@ -138,15 +138,6 @@ public class MonthHTMLGenerator {
 		String strDate = df.format(summary.getDate().getTime());
 		
 		return new File(outputDirectory, TemplateHtmlFileName.replace(DateTag, strDate));
-	}
-	
-	protected Map<Integer, DaySummary> createDayMap(List<DaySummary> logFileSummaries) {
-		 Map<Integer, DaySummary> map = new HashMap<Integer, DaySummary>();
-		 
-		 for (DaySummary summary : logFileSummaries) {
-			 map.put(summary.getDate().get(Calendar.DAY_OF_MONTH), summary);
-		 }
-		 return map;
 	}
 	
 	protected static void combineEntryHourMap(Map<Integer, Integer> totalsMap, Map<Integer, Integer> valuesMap) {
