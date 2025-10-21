@@ -16,6 +16,7 @@ import generators.YearHTMLGenerator;
 import loaders.AMLoader;
 import loaders.DataLoader;
 import loaders.DaySummary;
+import loaders.MonthSummary;
 
 public class GuestReport {
 	
@@ -77,7 +78,7 @@ public class GuestReport {
 		// Generate individual day & month html files
 		DaySummary aSummary = null;
 		Map<Integer, File> monthFileMap = new HashMap<Integer, File>();
-		Map<Integer, Map<Integer, DaySummary>> logFileMap = DataLoader.LoadData(logFiles, amAddresses);
+		Map<Integer, MonthSummary> logFileMap = DataLoader.LoadData(logFiles, amAddresses);
 		DayHTMLGenerator dayGenerator = new DayHTMLGenerator(inputDayHeaderTemplateFile);
 		MonthGraphHTMLGenerator monthGraphGenerator = new MonthGraphHTMLGenerator(inputMonthGraphHeaderTemplateFile);
 		MonthHTMLGenerator monthGenerator = new MonthHTMLGenerator(inputMonthHeaderTemplateFile, monthGraphGenerator);

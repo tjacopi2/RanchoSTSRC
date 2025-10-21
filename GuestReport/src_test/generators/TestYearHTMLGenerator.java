@@ -17,10 +17,10 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
-import generators.YearHTMLGenerator.YearSummaryData;
 import loaders.AMLoader;
 import loaders.DataLoader;
 import loaders.DaySummary;
+import loaders.MonthSummary;
 import utils.TestUtils;
 
 class TestYearHTMLGenerator {
@@ -39,7 +39,7 @@ class TestYearHTMLGenerator {
 		List<File> logFiles = new ArrayList<File>();
 		DataLoader.FetchLogFiles(inputLogDirectory, logFiles);
 		
-		Map<Integer, Map<Integer, DaySummary>> summaryMapByMonth = DataLoader.LoadData(logFiles, amAddresses);
+		Map<Integer, MonthSummary> summaryMapByMonth = DataLoader.LoadData(logFiles, amAddresses);
 		
 		YearHTMLGenerator yearGenerator = new YearHTMLGenerator(inputTemplateFile);
 		Map<Integer, File> dummyMonthHtmlMap = new HashMap<Integer, File>();
@@ -73,7 +73,7 @@ class TestYearHTMLGenerator {
 		File inputLogFile = new File("testData\\TestDataAll\\log2021-03-17.csv");
 		Set<String> amAddresses = AMLoader.LoadData(amInputDirectory);
 		
-		Map<Integer, Map<Integer, DaySummary>> summaryMapByMonth = new HashMap<Integer, Map<Integer, DaySummary>>();
+		Map<Integer, MonthSummary> summaryMapByMonth = new HashMap<Integer, MonthSummary>();
 		DataLoader.LoadFile(amAddresses, summaryMapByMonth, inputLogFile);
 		Map<Integer, DaySummary> monthSummaryMap = summaryMapByMonth.get(3);
 		assertNotNull(monthSummaryMap, "Could not find data for March");
@@ -89,29 +89,4 @@ class TestYearHTMLGenerator {
 		
 	}
 	
-
-	@Test
-	void testSummarizeData() throws IOException, ParseException {
-		File inputDirectory = new File("input\\");
-		File inputTemplateFile = new File(inputDirectory, "yearHeader.html");
-		File amInputDirectory = new File("testData\\amList\\");
-		
-		File inputLogDirectory = new File("testData\\TestDataAll");
-		Set<String> amAddresses = AMLoader.LoadData(amInputDirectory);
-		List<File> logFiles = new ArrayList<File>();
-		DataLoader.FetchLogFiles(inputLogDirectory, logFiles);
-		Map<Integer, Map<Integer, DaySummary>> summaryMapByMonth = DataLoader.LoadData(logFiles, amAddresses);
-		
-
-		Map<Integer, DaySummary> marchData = summaryMapByMonth.get(3);
-		assertNotNull(marchData);
-		assertEquals(3, marchData.size());
-		YearHTMLGenerator yearGenerator = new YearHTMLGenerator(inputTemplateFile);
-		
-		YearSummaryData summaryData = yearGenerator.summerizeData(marchData);
-		assertEquals(40, summaryData.totalHOAMembers);
-		assertEquals(36, summaryData.totalHOAGuests);
-		assertEquals(2, summaryData.totalAMMembers);
-		assertEquals(0, summaryData.totalAMGuests);
-	}
 }

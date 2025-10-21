@@ -9,6 +9,7 @@ import java.util.Calendar;
 import java.util.Map;
 
 import loaders.DaySummary;
+import loaders.MonthSummary;
 
 public class YearHTMLGenerator {
 	
@@ -25,7 +26,7 @@ public class YearHTMLGenerator {
 		templateData = Files.readString(yearHTMLtemplate.toPath());
 	}
 
-	public String generate(Map<Integer, Map<Integer, DaySummary>> logSummaryMap, Map<Integer, File> monthToFileMap) {
+	public String generate(Map<Integer, MonthSummary> logSummaryMap, Map<Integer, File> monthToFileMap) {
 		int year = -1;
 		String[] monthNames = new DateFormatSymbols().getMonths();
 		StringBuffer sb = new StringBuffer();
@@ -33,13 +34,16 @@ public class YearHTMLGenerator {
 		for (int i = 1; i<13; i++) {
 		//	sb.append("  <tr>\n");   // start row
 
-			Map<Integer, DaySummary> monthLogRecords = logSummaryMap.get(i);
+			MonthSummary monthLogRecords = logSummaryMap.get(i);
 			if (monthLogRecords != null) {
 				sb.append("  <tr>\n");   // start row
 				if (year < 0) {
 					year = monthLogRecords.values().iterator().next().getDate().get(Calendar.YEAR);
 				}
-				YearSummaryData overallSummary = summerizeData(monthLogRecords);
+				int totalHOAMembers = monthLogRecords.getTotalHOAMembers();
+				int totalAMMembers = monthLogRecords.getTotalAMMembers();
+				int totalHOAGuests = monthLogRecords.getTotalHOAGuests();
+				int totalAMGuests = monthLogRecords.getTotalAMGuests();
 				
 				sb.append("<td>");
 				sb.append("<a href=\"./" + monthToFileMap.get(i).getName() + "\">");
@@ -48,15 +52,15 @@ public class YearHTMLGenerator {
 				sb.append("</td>");
 				
 				sb.append("<td>");
-                sb.append(String.format("%d/%d", overallSummary.totalHOAMembers + overallSummary.totalAMMembers, overallSummary.totalHOAGuests + overallSummary.totalAMGuests));
+                sb.append(String.format("%d/%d", totalHOAMembers + totalAMMembers, totalHOAGuests + totalAMGuests));
                 sb.append("</td>");
                 
                 sb.append("<td>");
-                sb.append(String.format("%d/%d", overallSummary.totalHOAMembers, overallSummary.totalHOAGuests));
+                sb.append(String.format("%d/%d", totalHOAMembers, totalHOAGuests));
                 sb.append("</td>");
                 
                 sb.append("<td>");
-                sb.append(String.format("%d/%d", overallSummary.totalAMMembers, overallSummary.totalAMGuests));
+                sb.append(String.format("%d/%d", totalAMMembers, totalAMGuests));
                 sb.append("</td>");
             	sb.append("  </tr>\n");   // end row
 			} else {
@@ -90,21 +94,4 @@ public class YearHTMLGenerator {
 		return new File(outputDirectory, TemplateHtmlFileName.replace(DateTag, strDate));
 	}
 	
-	protected YearSummaryData summerizeData(Map<Integer, DaySummary> summaryMap) {
-		YearSummaryData overallSummary = new YearSummaryData();
-		for (DaySummary logSummary : summaryMap.values()) {
-			overallSummary.totalHOAMembers = overallSummary.totalHOAMembers + logSummary.getTotalHOA();
-			overallSummary.totalHOAGuests = overallSummary.totalHOAGuests + logSummary.getTotalHOAGuests();
-			overallSummary.totalAMMembers = overallSummary.totalAMMembers + logSummary.getTotalAM();
-			overallSummary.totalAMGuests = overallSummary.totalAMGuests + logSummary.getTotalAMGuests();
-		}
-		return overallSummary;
-	}
-	
-	public static class YearSummaryData {
-		public int totalHOAMembers = 0;
-		public int totalHOAGuests = 0;
-		public int totalAMMembers = 0;
-		public int totalAMGuests = 0;
-	}
 }

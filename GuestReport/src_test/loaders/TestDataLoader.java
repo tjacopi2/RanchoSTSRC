@@ -35,7 +35,7 @@ class TestDataLoader {
 		Set<String> amAddresses = AMLoader.LoadData(inputDirectory);
 		
 		File inputFile = new File("testData\\TestDataAll\\log2021-03-17.csv");
-		Map<Integer, Map<Integer, DaySummary>> summaryMapByMonth = new HashMap<Integer, Map<Integer, DaySummary>>();
+		Map<Integer, MonthSummary> summaryMapByMonth = new HashMap<Integer, MonthSummary>();
 		DataLoader.LoadFile(amAddresses, summaryMapByMonth, inputFile);
 		
 		assertEquals(1, summaryMapByMonth.size());   // should only have one month of data
@@ -87,7 +87,7 @@ class TestDataLoader {
 
 		List<File> logFiles = new ArrayList<File>();
 		DataLoader.FetchLogFiles(inputDirectory, logFiles);
-		Map<Integer, Map<Integer, DaySummary>> logFileMap = DataLoader.LoadData(logFiles, new HashSet<String>()); 
+		Map<Integer, MonthSummary> logFileMap = DataLoader.LoadData(logFiles, new HashSet<String>()); 
 		
 		assertEquals(2, logFileMap.size());
 		
@@ -121,7 +121,7 @@ class TestDataLoader {
 
 		List<File> logFiles = new ArrayList<File>();
 		DataLoader.FetchLogFiles(inputDirectory, logFiles);
-		Map<Integer, Map<Integer, DaySummary>> monthToDayMap = DataLoader.LoadData(logFiles, new HashSet<String>()); 
+		Map<Integer, MonthSummary> monthToDayMap = DataLoader.LoadData(logFiles, new HashSet<String>()); 
 		
 		assertEquals(2, monthToDayMap.size());    // Should have two months of data
 		
@@ -155,7 +155,7 @@ class TestDataLoader {
 
 		List<File> logFiles = new ArrayList<File>();
 		DataLoader.FetchLogFiles(inputDirectory, logFiles);
-		Map<Integer, Map<Integer, DaySummary>> monthToDayMap = DataLoader.LoadData(logFiles, new HashSet<String>()); 
+		Map<Integer, MonthSummary> monthToDayMap = DataLoader.LoadData(logFiles, new HashSet<String>()); 
 		
 		assertEquals(2, monthToDayMap.size());    // Should have two months of data
 		

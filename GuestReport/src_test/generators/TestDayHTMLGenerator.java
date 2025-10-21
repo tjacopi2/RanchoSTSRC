@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import loaders.AMLoader;
 import loaders.DataLoader;
 import loaders.DaySummary;
+import loaders.MonthSummary;
 import utils.TestUtils;
 
 class TestDayHTMLGenerator {
@@ -29,7 +30,7 @@ class TestDayHTMLGenerator {
 		File inputLogFile = new File("testData\\TestDataAll\\log2021-03-17.csv");
 		Set<String> amAddresses = AMLoader.LoadData(amInputDirectory);
 
-		Map<Integer, Map<Integer, DaySummary>> summaryMapByMonth = new HashMap<Integer, Map<Integer, DaySummary>>();
+		Map<Integer, MonthSummary> summaryMapByMonth = new HashMap<Integer, MonthSummary>();
 		DataLoader.LoadFile(amAddresses, summaryMapByMonth, inputLogFile);
 		Map<Integer, DaySummary> monthSummaryMap = summaryMapByMonth.get(3);
 		assertNotNull(monthSummaryMap, "Could not find data for March");
@@ -67,7 +68,7 @@ class TestDayHTMLGenerator {
 		File inputLogFile = new File("testData\\TestDataAll\\log2021-03-17.csv");
 		Set<String> amAddresses = AMLoader.LoadData(amInputDirectory);
 		
-		Map<Integer, Map<Integer, DaySummary>> summaryMapByMonth = new HashMap<Integer, Map<Integer, DaySummary>>();
+		Map<Integer, MonthSummary> summaryMapByMonth = new HashMap<Integer, MonthSummary>();
 		DataLoader.LoadFile(amAddresses, summaryMapByMonth, inputLogFile);
 		Map<Integer, DaySummary> monthSummaryMap = summaryMapByMonth.get(3);
 		assertNotNull(monthSummaryMap, "Could not find data for March");

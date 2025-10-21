@@ -24,9 +24,9 @@ import loaders.DaySummary.Household;
 public class DataLoader {
     public static final String GUEST = "Guest_";
 	 
-	public static Map<Integer, Map<Integer, DaySummary>> LoadData(List<File> logFiles, Set<String> amAddresses) {
+	public static Map<Integer, MonthSummary> LoadData(List<File> logFiles, Set<String> amAddresses) {
 		int count = 0;
-		Map<Integer, Map<Integer, DaySummary>> summaryMapByMonth = new HashMap<Integer, Map<Integer, DaySummary>>();
+		Map<Integer, MonthSummary> summaryMapByMonth = new HashMap<Integer, MonthSummary>();
 		for (File f : logFiles) {
 			try {
 				LoadFile(amAddresses, summaryMapByMonth, f);
@@ -42,7 +42,7 @@ public class DataLoader {
 		return summaryMapByMonth;
 	}
 
-	public static void LoadFile(Set<String> amAddresses, Map<Integer, Map<Integer, DaySummary>> summaryMapByMonth,
+	public static void LoadFile(Set<String> amAddresses, Map<Integer, MonthSummary> summaryMapByMonth,
 			File logFile) throws FileNotFoundException, ParseException, IOException {
 		// Read the log file
 		CSVReader reader = new CSVReader(new FileReader(logFile));
@@ -58,9 +58,9 @@ public class DataLoader {
 				
 				// Is this the first time we have seen this month?
 				Integer month = gc.get(Calendar.MONTH) + 1;
-				Map<Integer, DaySummary> monthSummaryMap = summaryMapByMonth.get(month);
+				MonthSummary monthSummaryMap = summaryMapByMonth.get(month);
 				if (monthSummaryMap == null) {
-					monthSummaryMap = new HashMap<Integer, DaySummary>();
+					monthSummaryMap = new MonthSummary();
 					summaryMapByMonth.put(month, monthSummaryMap);
 				}
 				
