@@ -32,12 +32,11 @@ public class DataLoader {
 				LoadFile(amAddresses, summaryMapByMonth, f);
 				count++;
 			} catch (IOException | ParseException e) {
-				System.err.println("Skipping log file " + f.getAbsolutePath());
-				e.printStackTrace();
+				System.err.println("Skipping log file " + f.getAbsolutePath() + " because not a valid log format.  Error: " + e.getMessage());
+				//e.printStackTrace();
 			}
 			
-		}
-					
+		}				
 		System.out.println("Successfully read " + count + " log files");
 		
 		return summaryMapByMonth;
