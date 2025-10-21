@@ -92,18 +92,12 @@ public class DataLoader {
 		    		}
 					daySummary.getHouseholds().put(address, h);
 				}
+				
 				if (values[2] != null && values[2].startsWith(GUEST)) {
 					h.setGuests(h.getGuests() + 1);
-					daySummary.setTotalGuests(daySummary.getTotalGuests() + 1);
-					if (h.isAmHousehold()) {
-		    			daySummary.setTotalAMGuests(daySummary.getTotalAMGuests() + 1);
-		    		}
 				}
 				h.setPeople(h.getPeople() + 1);
-				daySummary.setTotalPeople(daySummary.getTotalPeople() + 1);
-				if (h.isAmHousehold()) {
-					daySummary.setTotalAM(daySummary.getTotalAM() + 1);
-				}
+				
 			}
 		}
 		reader.close();

@@ -12,10 +12,6 @@ import java.util.Map;
 public class DaySummary {
 	
 	private GregorianCalendar date = null;
-	private int totalPeople = 0;
-	private int totalGuests = 0;
-	private int totalAM = 0;
-	private int totalAMGuests = 0;
 	private Map<String, Household> households = new HashMap<String, Household>();
 	private File htmlDetailFile = null;
 	private Map<Integer, Integer> entryHourMap = new HashMap<Integer, Integer>();
@@ -30,19 +26,19 @@ public class DaySummary {
 	}
 
 	public int getTotalPeople() {
-		return totalPeople;
-	}
-
-	public void setTotalPeople(int totalPeople) {
-		this.totalPeople = totalPeople;
+		int count = 0;
+		for (Household h : households.values()) {
+			count = count + h.getPeople();
+		}
+		return count;
 	}
 
 	public int getTotalGuests() {
-		return totalGuests;
-	}
-
-	public void setTotalGuests(int totalGuests) {
-		this.totalGuests = totalGuests;
+		int count = 0;
+		for (Household h : households.values()) {
+			count = count + h.getGuests();
+		}
+		return count;
 	}
 
 	public Map<String, Household> getHouseholds() {
@@ -65,27 +61,43 @@ public class DaySummary {
 	}
 
 	public int getTotalAM() {
-		return totalAM;
+		int count = 0;
+		for (Household h : households.values()) {
+			if (h.isAmHousehold()) {
+			  count = count + h.getPeople();
+			}
+		}
+		return count;
 	}
 
 	public int getTotalAMGuests() {
-		return totalAMGuests;
-	}
-	
-	public int setTotalAM(int newAM) {
-		return totalAM = newAM;
-	}
-
-	public int setTotalAMGuests(int newAMGuests) {
-		return totalAMGuests = newAMGuests;
+		int count = 0;
+		for (Household h : households.values()) {
+			if (h.isAmHousehold()) {
+			  count = count + h.getGuests();
+			}
+		}
+		return count;
 	}
 	
 	public int getTotalHOA() {
-		return totalPeople - totalAM;
+		int count = 0;
+		for (Household h : households.values()) {
+			if (!h.isAmHousehold()) {
+			  count = count + h.getPeople();
+			}
+		}
+		return count;
 	}
 	
 	public int getTotalHOAGuests() {
-		return totalGuests - totalAMGuests;
+		int count = 0;
+		for (Household h : households.values()) {
+			if (!h.isAmHousehold()) {
+			  count = count + h.getGuests();
+			}
+		}
+		return count;
 	}
 
 	public Map<Integer, Integer> getEntryHourMap() {
