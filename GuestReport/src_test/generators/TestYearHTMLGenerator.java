@@ -21,6 +21,7 @@ import loaders.AMLoader;
 import loaders.DataLoader;
 import loaders.DaySummary;
 import loaders.MonthSummary;
+import loaders.YearSummary;
 import utils.TestUtils;
 
 class TestYearHTMLGenerator {
@@ -73,7 +74,7 @@ class TestYearHTMLGenerator {
 		File inputLogFile = new File("testData\\TestDataAll\\log2021-03-17.csv");
 		Set<String> amAddresses = AMLoader.LoadData(amInputDirectory);
 		
-		Map<Integer, MonthSummary> summaryMapByMonth = new HashMap<Integer, MonthSummary>();
+		YearSummary summaryMapByMonth = new YearSummary();
 		DataLoader.LoadFile(amAddresses, summaryMapByMonth, inputLogFile);
 		Map<Integer, DaySummary> monthSummaryMap = summaryMapByMonth.get(3);
 		assertNotNull(monthSummaryMap, "Could not find data for March");

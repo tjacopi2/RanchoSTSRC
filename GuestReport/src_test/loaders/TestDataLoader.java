@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -35,11 +34,11 @@ class TestDataLoader {
 		Set<String> amAddresses = AMLoader.LoadData(inputDirectory);
 		
 		File inputFile = new File("testData\\TestDataAll\\log2021-03-17.csv");
-		Map<Integer, MonthSummary> summaryMapByMonth = new HashMap<Integer, MonthSummary>();
-		DataLoader.LoadFile(amAddresses, summaryMapByMonth, inputFile);
+		YearSummary yearSummary = new YearSummary();
+		DataLoader.LoadFile(amAddresses, yearSummary, inputFile);
 		
-		assertEquals(1, summaryMapByMonth.size());   // should only have one month of data
-		Map<Integer, DaySummary> marchData = summaryMapByMonth.get(3);  // Get March data
+		assertEquals(1, yearSummary.size());   // should only have one month of data
+		Map<Integer, DaySummary> marchData = yearSummary.get(3);  // Get March data
 		assertNotNull(marchData, "March data not found");
 		
 		assertEquals(1, marchData.size());           // should only have one day of data

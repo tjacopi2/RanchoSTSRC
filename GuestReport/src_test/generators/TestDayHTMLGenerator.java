@@ -1,13 +1,14 @@
 package generators;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.text.ParseException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -17,7 +18,7 @@ import org.junit.jupiter.api.Test;
 import loaders.AMLoader;
 import loaders.DataLoader;
 import loaders.DaySummary;
-import loaders.MonthSummary;
+import loaders.YearSummary;
 import utils.TestUtils;
 
 class TestDayHTMLGenerator {
@@ -30,9 +31,9 @@ class TestDayHTMLGenerator {
 		File inputLogFile = new File("testData\\TestDataAll\\log2021-03-17.csv");
 		Set<String> amAddresses = AMLoader.LoadData(amInputDirectory);
 
-		Map<Integer, MonthSummary> summaryMapByMonth = new HashMap<Integer, MonthSummary>();
-		DataLoader.LoadFile(amAddresses, summaryMapByMonth, inputLogFile);
-		Map<Integer, DaySummary> monthSummaryMap = summaryMapByMonth.get(3);
+		YearSummary yearSummary = new YearSummary();
+		DataLoader.LoadFile(amAddresses, yearSummary, inputLogFile);
+		Map<Integer, DaySummary> monthSummaryMap = yearSummary.get(3);
 		assertNotNull(monthSummaryMap, "Could not find data for March");
 		DaySummary summary = monthSummaryMap.get(17);
 		assertNotNull(summary, "Could not find data for the 17th of March");
@@ -68,9 +69,9 @@ class TestDayHTMLGenerator {
 		File inputLogFile = new File("testData\\TestDataAll\\log2021-03-17.csv");
 		Set<String> amAddresses = AMLoader.LoadData(amInputDirectory);
 		
-		Map<Integer, MonthSummary> summaryMapByMonth = new HashMap<Integer, MonthSummary>();
-		DataLoader.LoadFile(amAddresses, summaryMapByMonth, inputLogFile);
-		Map<Integer, DaySummary> monthSummaryMap = summaryMapByMonth.get(3);
+		YearSummary yearSummary = new YearSummary();
+		DataLoader.LoadFile(amAddresses, yearSummary, inputLogFile);
+		Map<Integer, DaySummary> monthSummaryMap = yearSummary.get(3);
 		assertNotNull(monthSummaryMap, "Could not find data for March");
 		DaySummary summary = monthSummaryMap.get(17);
 		assertNotNull(summary, "Could not find data for the 17th of March");
