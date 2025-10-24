@@ -15,6 +15,7 @@ public class YearHTMLGenerator {
 	
 	protected static final String TableDataTag = "%TABLEROWS%";
 	protected static final String DateTag = "%DATE%";
+	protected static final String TimePeriodTag = "%TIME_PERIOD%";
 	protected static final String StringDateTag = "%STRING_DATE%";
 	protected static final String TemplateHtmlFileName = "summary_" + DateTag + ".html";
 	protected static final String DayNotInMonth = "    <td><span class=\"date\">&nbsp;</span></td>\n";
@@ -52,15 +53,15 @@ public class YearHTMLGenerator {
 				sb.append("</td>");
 				
 				sb.append("<td>");
-                sb.append(String.format("%d/%d", totalHOAMembers + totalAMMembers, totalHOAGuests + totalAMGuests));
+                sb.append(String.format("%,d / %,d", totalHOAMembers + totalAMMembers, totalHOAGuests + totalAMGuests));
                 sb.append("</td>");
                 
                 sb.append("<td>");
-                sb.append(String.format("%d/%d", totalHOAMembers, totalHOAGuests));
+                sb.append(String.format("%,d / %,d", totalHOAMembers, totalHOAGuests));
                 sb.append("</td>");
                 
                 sb.append("<td>");
-                sb.append(String.format("%d/%d", totalAMMembers, totalAMGuests));
+                sb.append(String.format("%,d / %,d", totalAMMembers, totalAMGuests));
                 sb.append("</td>");
             	sb.append("  </tr>\n");   // end row
 			} else {
@@ -84,7 +85,7 @@ public class YearHTMLGenerator {
 		sb.append("  </tr></tfoot>\n");
 		*/
 		
-		return templateData.replaceAll(DateTag, String.valueOf(year)).replace(TableDataTag, sb.toString());
+		return templateData.replaceAll(DateTag, String.valueOf(year)).replace(TimePeriodTag, "Month").replace(TableDataTag, sb.toString());
 	}
 	
 	public File generateOutputFilename(File outputDirectory, DaySummary summary) {

@@ -13,6 +13,7 @@ import generators.DayHTMLGenerator;
 import generators.MonthGraphHTMLGenerator;
 import generators.MonthHTMLGenerator;
 import generators.YearHTMLGenerator;
+import generators.YearsHTMLGenerator;
 import loaders.AMLoader;
 import loaders.DataLoader;
 import loaders.DaySummary;
@@ -77,45 +78,53 @@ public class GuestReport {
 		Set<String> amAddresses = AMLoader.LoadData(inputDirectory);
 		
 		// Generate individual day & month html files
-		DaySummary aSummary = null;
-		Map<Integer, File> monthFileMap = new HashMap<Integer, File>();
 		Map<Integer, YearSummary> yearSummaries = DataLoader.LoadData(logFiles, amAddresses);
-		
-		// Temporary line to just take the first year of data.  Replace when we generate multiple years
-		YearSummary yearSummary = yearSummaries.values().iterator().next();
-		// ----------------------------------------------
 		
 		DayHTMLGenerator dayGenerator = new DayHTMLGenerator(inputDayHeaderTemplateFile);
 		MonthGraphHTMLGenerator monthGraphGenerator = new MonthGraphHTMLGenerator(inputMonthGraphHeaderTemplateFile);
 		MonthHTMLGenerator monthGenerator = new MonthHTMLGenerator(inputMonthHeaderTemplateFile, monthGraphGenerator);
-		for (Integer month : yearSummary.keySet()) {
-			MonthSummary dayOfMonthSummaryMap = yearSummary.get(month);
-			for (DaySummary summary : dayOfMonthSummaryMap.values()) {
-				String html = dayGenerator.generate(summary);
-				File outputFile = dayGenerator.generateOutputFilename(outputDirectory, summary);
-				outputFile.delete();
-				Files.writeString(outputFile.toPath(), html, StandardOpenOption.CREATE);
-				summary.setHtmlDetailFile(outputFile);
-				if (aSummary == null) {
-					aSummary = summary;
-				}
-			}
-			String monthHtml = monthGenerator.generate(dayOfMonthSummaryMap);
-			DaySummary anyDaySummary = dayOfMonthSummaryMap.values().iterator().next();
-			File outputMonthFile = monthGenerator.generateOutputFilename(outputDirectory, anyDaySummary);
-			outputMonthFile.delete();
-			Files.writeString(outputMonthFile.toPath(), monthHtml, StandardOpenOption.CREATE);
-			monthFileMap.put(month, outputMonthFile);
-		}
-		
 		YearHTMLGenerator yearGenerator = new YearHTMLGenerator(inputYearHeaderTemplateFile);
-		String yearHtml = yearGenerator.generate(yearSummary, monthFileMap);
-		File outputYearFile = yearGenerator.generateOutputFilename(outputDirectory, aSummary);
-		outputYearFile.delete();
-		Files.writeString(outputYearFile.toPath(), yearHtml, StandardOpenOption.CREATE);
-		System.out.println("Start at " + outputYearFile.getCanonicalPath());	
+		YearsHTMLGenerator yearsGenerator = new YearsHTMLGenerator(inputYearHeaderTemplateFile);
 		
-		Desktop.getDesktop().browse(outputYearFile.toURI());   // And lets be fancy and open the browser to display the top page
+		Map<Integer, File> yearFileMap = new HashMap<Integer, File>();
+		for (Integer year : yearSummaries.keySet()) {
+			YearSummary yearSummary = yearSummaries.get(year);			
+			DaySummary aSummary = null;
+			Map<Integer, File> monthFileMap = new HashMap<Integer, File>();
+			for (Integer month : yearSummary.keySet()) {
+				MonthSummary dayOfMonthSummaryMap = yearSummary.get(month);
+				for (DaySummary summary : dayOfMonthSummaryMap.values()) {
+					String html = dayGenerator.generate(summary);
+					File outputFile = dayGenerator.generateOutputFilename(outputDirectory, summary);
+					outputFile.delete();
+					Files.writeString(outputFile.toPath(), html, StandardOpenOption.CREATE);
+					summary.setHtmlDetailFile(outputFile);
+					if (aSummary == null) {
+						aSummary = summary;
+					}
+				}
+				String monthHtml = monthGenerator.generate(dayOfMonthSummaryMap);
+				DaySummary anyDaySummary = dayOfMonthSummaryMap.values().iterator().next();
+				File outputMonthFile = monthGenerator.generateOutputFilename(outputDirectory, anyDaySummary);
+				outputMonthFile.delete();
+				Files.writeString(outputMonthFile.toPath(), monthHtml, StandardOpenOption.CREATE);
+				monthFileMap.put(month, outputMonthFile);
+			}
+
+			String yearHtml = yearGenerator.generate(yearSummary, monthFileMap);
+			File outputYearFile = yearGenerator.generateOutputFilename(outputDirectory, aSummary);
+			outputYearFile.delete();
+			Files.writeString(outputYearFile.toPath(), yearHtml, StandardOpenOption.CREATE);
+			yearFileMap.put(year, outputYearFile);
+		}
+		String yearsHtml = yearsGenerator.generate(yearSummaries, yearFileMap);
+		File outputYearsFile = YearsHTMLGenerator.generateOutputFilename(outputDirectory);
+		outputYearsFile.delete();
+		Files.writeString(outputYearsFile.toPath(), yearsHtml, StandardOpenOption.CREATE);
+		
+		System.out.println("Start at " + outputYearsFile.getCanonicalPath());	
+		
+		Desktop.getDesktop().browse(outputYearsFile.toURI());   // And lets be fancy and open the browser to display the top page
 	}
 
 }
