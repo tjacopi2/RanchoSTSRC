@@ -23,10 +23,14 @@ class TestMonthSummary {
 		Set<String> amAddresses = AMLoader.LoadData(amInputDirectory);
 		List<File> logFiles = new ArrayList<File>();
 		DataLoader.FetchLogFiles(inputLogDirectory, logFiles);
-		Map<Integer, MonthSummary> summaryMapByMonth = DataLoader.LoadData(logFiles, amAddresses);
+		Map<Integer, YearSummary> yearSummaries = DataLoader.LoadData(logFiles, amAddresses);
 		
-
-		MonthSummary marchData = summaryMapByMonth.get(3);
+		// Validate the year returned
+		assertEquals(1, yearSummaries.size());
+		YearSummary yearSummary = yearSummaries.get(2021);
+		assertNotNull(yearSummary, "Could not find data for 2021.  Instead data was for year " + yearSummaries.keySet());
+		
+		MonthSummary marchData = yearSummary.get(3);
 		assertNotNull(marchData);
 		assertEquals(3, marchData.size());
 		assertEquals(40, marchData.getTotalHOAMembers());

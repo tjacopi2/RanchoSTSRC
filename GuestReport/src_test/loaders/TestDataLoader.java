@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -34,8 +35,13 @@ class TestDataLoader {
 		Set<String> amAddresses = AMLoader.LoadData(inputDirectory);
 		
 		File inputFile = new File("testData\\TestDataAll\\log2021-03-17.csv");
-		YearSummary yearSummary = new YearSummary();
-		DataLoader.LoadFile(amAddresses, yearSummary, inputFile);
+		Map<Integer, YearSummary> yearSummaries = new HashMap<Integer, YearSummary>();
+		DataLoader.LoadFile(amAddresses, yearSummaries, inputFile);
+		
+		// Validate the year returned
+		assertEquals(1, yearSummaries.size());
+		YearSummary yearSummary = yearSummaries.get(2021);
+		assertNotNull(yearSummary, "Could not find data for 2021.  Instead data was for year " + yearSummaries.keySet());
 		
 		assertEquals(1, yearSummary.size());   // should only have one month of data
 		Map<Integer, DaySummary> marchData = yearSummary.get(3);  // Get March data
@@ -86,11 +92,17 @@ class TestDataLoader {
 
 		List<File> logFiles = new ArrayList<File>();
 		DataLoader.FetchLogFiles(inputDirectory, logFiles);
-		Map<Integer, MonthSummary> logFileMap = DataLoader.LoadData(logFiles, new HashSet<String>()); 
+		Map<Integer, YearSummary> yearSummaries = DataLoader.LoadData(logFiles, new HashSet<String>()); 
 		
-		assertEquals(2, logFileMap.size());
+		// Validate the year returned
+		assertEquals(1, yearSummaries.size());
+		YearSummary yearSummary = yearSummaries.get(2021);
+		assertNotNull(yearSummary, "Could not find data for 2021.  Instead data was for year " + yearSummaries.keySet());
 		
-		Map<Integer, DaySummary> monthToDaySummaryMap = logFileMap.get(2);
+		
+		assertEquals(2, yearSummary.size());
+		
+		Map<Integer, DaySummary> monthToDaySummaryMap = yearSummary.get(2);
 		assertEquals(2, monthToDaySummaryMap.size());
 		
 		assertEquals(25, monthToDaySummaryMap.get(25).getDate().get(Calendar.DAY_OF_MONTH));
@@ -98,7 +110,7 @@ class TestDataLoader {
 		assertEquals(26, monthToDaySummaryMap.get(26).getDate().get(Calendar.DAY_OF_MONTH));
 		assertEquals(16, monthToDaySummaryMap.get(26).getTotalPeople());
 		
-		monthToDaySummaryMap = logFileMap.get(3);    // Now get march data
+		monthToDaySummaryMap = yearSummary.get(3);    // Now get march data
 		assertEquals(3, monthToDaySummaryMap.size());
 		
 		assertEquals(16, monthToDaySummaryMap.get(16).getDate().get(Calendar.DAY_OF_MONTH));
@@ -120,11 +132,18 @@ class TestDataLoader {
 
 		List<File> logFiles = new ArrayList<File>();
 		DataLoader.FetchLogFiles(inputDirectory, logFiles);
-		Map<Integer, MonthSummary> monthToDayMap = DataLoader.LoadData(logFiles, new HashSet<String>()); 
 		
-		assertEquals(2, monthToDayMap.size());    // Should have two months of data
+		Map<Integer, YearSummary> yearSummaries = DataLoader.LoadData(logFiles, new HashSet<String>()); 
 		
-		Map<Integer, DaySummary> monthToDaySummaryMap = monthToDayMap.get(2);   // Get Feburary data
+		// Validate the year returned
+		assertEquals(1, yearSummaries.size());
+		YearSummary yearSummary = yearSummaries.get(2021);
+		assertNotNull(yearSummary, "Could not find data for 2021.  Instead data was for year " + yearSummaries.keySet());
+        		
+		
+		assertEquals(2, yearSummary.size());    // Should have two months of data
+		
+		Map<Integer, DaySummary> monthToDaySummaryMap = yearSummary.get(2);   // Get Feburary data
 		assertEquals(2, monthToDaySummaryMap.size());                           // Should have two days in Feb
 		
 		assertEquals(25, monthToDaySummaryMap.get(25).getDate().get(Calendar.DAY_OF_MONTH));
@@ -132,7 +151,7 @@ class TestDataLoader {
 		assertEquals(26, monthToDaySummaryMap.get(26).getDate().get(Calendar.DAY_OF_MONTH));
 		assertEquals(16, monthToDaySummaryMap.get(26).getTotalPeople());
 		
-		monthToDaySummaryMap = monthToDayMap.get(3);    // Now get march data
+		monthToDaySummaryMap = yearSummary.get(3);    // Now get march data
 		assertEquals(3, monthToDaySummaryMap.size());
 		
 		assertEquals(16, monthToDaySummaryMap.get(16).getDate().get(Calendar.DAY_OF_MONTH));
@@ -147,6 +166,62 @@ class TestDataLoader {
 	
 	}
 	
+	@Test
+	void testLoadFromCombinedLogFileMultipleYears() throws IOException, ParseException {
+		File inputDirectory = new File("testData\\TestDataCombinedLogFileMultYears");
+
+		List<File> logFiles = new ArrayList<File>();
+		DataLoader.FetchLogFiles(inputDirectory, logFiles);
+		
+		Map<Integer, YearSummary> yearSummaries = DataLoader.LoadData(logFiles, new HashSet<String>()); 
+		
+		// Validate the year returned
+		assertEquals(5, yearSummaries.size(), "Unexpected number of years.  Years found are "+ yearSummaries.keySet());
+		
+		YearSummary yearSummary = yearSummaries.get(2021);
+		assertNotNull(yearSummary, "Could not find data for 2021.");
+		assertEquals(2, yearSummary.size());    // Should have two months of data
+		Map<Integer, DaySummary> monthToDaySummaryMap = yearSummary.get(2);   // Get Feburary data
+		assertEquals(1, monthToDaySummaryMap.size());                         // Should have one days in Feb
+		assertEquals(9, monthToDaySummaryMap.get(25).getTotalPeople());
+		monthToDaySummaryMap = yearSummary.get(3);    // Now get march data
+		assertEquals(1, monthToDaySummaryMap.size());
+		assertEquals(3, monthToDaySummaryMap.get(18).getTotalPeople());
+		
+		yearSummary = yearSummaries.get(2022);
+    	assertNotNull(yearSummary, "Could not find data for 2022.");
+		assertEquals(1, yearSummary.size());    // Should have two months of data
+		monthToDaySummaryMap = yearSummary.get(2);   // Get Feburary data
+		assertEquals(1, monthToDaySummaryMap.size());                         // Should have one days in Feb
+		assertEquals(10, monthToDaySummaryMap.get(26).getTotalPeople());
+		
+		yearSummary = yearSummaries.get(2023);
+    	assertNotNull(yearSummary, "Could not find data for 2023.");
+		assertEquals(2, yearSummary.size());    // Should have two months of data
+		monthToDaySummaryMap = yearSummary.get(2);   // Get Feburary data
+		assertEquals(1, monthToDaySummaryMap.size());                         // Should have one days in Feb
+		assertEquals(6, monthToDaySummaryMap.get(26).getTotalPeople());
+		monthToDaySummaryMap = yearSummary.get(3);   // Get March data
+		assertEquals(1, monthToDaySummaryMap.size());                         // Should have one days in March
+		assertEquals(2, monthToDaySummaryMap.get(16).getTotalPeople());
+		
+		
+		yearSummary = yearSummaries.get(2024);
+    	assertNotNull(yearSummary, "Could not find data for 2024.");
+		assertEquals(1, yearSummary.size());    // Should have two months of data
+		monthToDaySummaryMap = yearSummary.get(3);   // Get March data
+		assertEquals(1, monthToDaySummaryMap.size());                         // Should have one days in March
+		assertEquals(18, monthToDaySummaryMap.get(17).getTotalPeople());
+	
+		yearSummary = yearSummaries.get(2025);
+    	assertNotNull(yearSummary, "Could not find data for 2025");
+		assertEquals(1, yearSummary.size());    // Should have two months of data
+		monthToDaySummaryMap = yearSummary.get(3);   // Get March data
+		assertEquals(2, monthToDaySummaryMap.size());                         // Should have two days in March
+		assertEquals(2, monthToDaySummaryMap.get(17).getTotalPeople());
+		assertEquals(17, monthToDaySummaryMap.get(18).getTotalPeople());
+	}
+	
 
 	@Test
 	void testLoadFromLogFilesWithInvalidCSVFile() throws IOException, ParseException {
@@ -154,11 +229,16 @@ class TestDataLoader {
 
 		List<File> logFiles = new ArrayList<File>();
 		DataLoader.FetchLogFiles(inputDirectory, logFiles);
-		Map<Integer, MonthSummary> monthToDayMap = DataLoader.LoadData(logFiles, new HashSet<String>()); 
+		Map<Integer, YearSummary> yearSummaries = DataLoader.LoadData(logFiles, new HashSet<String>()); 
 		
-		assertEquals(2, monthToDayMap.size());    // Should have two months of data
+		// Validate the year returned
+		assertEquals(1, yearSummaries.size());
+		YearSummary yearSummary = yearSummaries.get(2021);
+		assertNotNull(yearSummary, "Could not find data for 2021.  Instead data was for year " + yearSummaries.keySet());
 		
-		Map<Integer, DaySummary> monthToDaySummaryMap = monthToDayMap.get(2);   // Get Feburary data
+		assertEquals(2, yearSummary.size());    // Should have two months of data
+		
+		Map<Integer, DaySummary> monthToDaySummaryMap = yearSummary.get(2);   // Get Feburary data
 		assertEquals(2, monthToDaySummaryMap.size());                           // Should have two days in Feb
 		
 		assertEquals(25, monthToDaySummaryMap.get(25).getDate().get(Calendar.DAY_OF_MONTH));
@@ -166,7 +246,7 @@ class TestDataLoader {
 		assertEquals(26, monthToDaySummaryMap.get(26).getDate().get(Calendar.DAY_OF_MONTH));
 		assertEquals(16, monthToDaySummaryMap.get(26).getTotalPeople());
 		
-		monthToDaySummaryMap = monthToDayMap.get(3);    // Now get march data
+		monthToDaySummaryMap = yearSummary.get(3);    // Now get march data
 		assertEquals(2, monthToDaySummaryMap.size());
 		
 		assertEquals(16, monthToDaySummaryMap.get(16).getDate().get(Calendar.DAY_OF_MONTH));

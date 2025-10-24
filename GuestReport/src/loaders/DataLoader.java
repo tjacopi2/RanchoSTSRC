@@ -11,8 +11,10 @@ import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.opencsv.CSVReader;
@@ -22,12 +24,12 @@ import loaders.DaySummary.Household;
 public class DataLoader {
     public static final String GUEST = "Guest_";
 	 
-	public static YearSummary LoadData(List<File> logFiles, Set<String> amAddresses) {
+	public static Map<Integer, YearSummary> LoadData(List<File> logFiles, Set<String> amAddresses) {
 		int count = 0;
-		YearSummary yearSummary = new YearSummary();
+		Map<Integer, YearSummary> yearSummaries = new HashMap<Integer, YearSummary>();
 		for (File f : logFiles) {
 			try {
-				LoadFile(amAddresses, yearSummary, f);
+				LoadFile(amAddresses, yearSummaries, f);
 				count++;
 			} catch (IOException | ParseException e) {
 				System.err.println("Skipping log file " + f.getAbsolutePath() + " because not a valid log format.  Error: " + e.getMessage());
@@ -37,10 +39,10 @@ public class DataLoader {
 		}				
 		System.out.println("Successfully read " + count + " log files");
 		
-		return yearSummary;
+		return yearSummaries;
 	}
 
-	public static void LoadFile(Set<String> amAddresses, YearSummary yearSummary,
+	public static void LoadFile(Set<String> amAddresses, Map<Integer, YearSummary> yearSummaries,
 			File logFile) throws FileNotFoundException, ParseException, IOException {
 		// Read the log file
 		CSVReader reader = new CSVReader(new FileReader(logFile));
@@ -53,6 +55,14 @@ public class DataLoader {
 				Date date2 = df.parse(strDate);
 				GregorianCalendar gc = new GregorianCalendar();
 				gc.setTime(date2);
+				
+				// Is this the first time we have seen this year?
+				Integer year = gc.get(Calendar.YEAR);
+				YearSummary yearSummary = yearSummaries.get(year);
+				if (yearSummary == null) {
+					yearSummary = new YearSummary();
+					yearSummaries.put(year, yearSummary);
+				}
 				
 				// Is this the first time we have seen this month?
 				Integer month = gc.get(Calendar.MONTH) + 1;

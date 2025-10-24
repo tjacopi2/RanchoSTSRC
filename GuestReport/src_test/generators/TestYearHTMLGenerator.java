@@ -40,14 +40,19 @@ class TestYearHTMLGenerator {
 		List<File> logFiles = new ArrayList<File>();
 		DataLoader.FetchLogFiles(inputLogDirectory, logFiles);
 		
-		Map<Integer, MonthSummary> summaryMapByMonth = DataLoader.LoadData(logFiles, amAddresses);
+		Map<Integer, YearSummary> yearSummaries = DataLoader.LoadData(logFiles, amAddresses);
+		
+		// Validate the year returned
+		assertEquals(1, yearSummaries.size());
+		YearSummary yearSummary = yearSummaries.get(2021);
+		assertNotNull(yearSummary, "Could not find data for 2021.  Instead data was for year " + yearSummaries.keySet());
 		
 		YearHTMLGenerator yearGenerator = new YearHTMLGenerator(inputTemplateFile);
 		Map<Integer, File> dummyMonthHtmlMap = new HashMap<Integer, File>();
 		dummyMonthHtmlMap.put(2, new File(DummyMonthFileName1));
 		dummyMonthHtmlMap.put(3, new File(DummyMonthFileName2));
 		
-		String html = yearGenerator.generate(summaryMapByMonth, dummyMonthHtmlMap);  
+		String html = yearGenerator.generate(yearSummary, dummyMonthHtmlMap);  
 		
 		File outputFile = new File("testData\\output\\TestYearHTMLGenerator.html");
 		outputFile.delete();
@@ -74,9 +79,15 @@ class TestYearHTMLGenerator {
 		File inputLogFile = new File("testData\\TestDataAll\\log2021-03-17.csv");
 		Set<String> amAddresses = AMLoader.LoadData(amInputDirectory);
 		
-		YearSummary summaryMapByMonth = new YearSummary();
-		DataLoader.LoadFile(amAddresses, summaryMapByMonth, inputLogFile);
-		Map<Integer, DaySummary> monthSummaryMap = summaryMapByMonth.get(3);
+		Map<Integer, YearSummary> yearSummaries = new HashMap<Integer, YearSummary>();
+		DataLoader.LoadFile(amAddresses, yearSummaries, inputLogFile);
+		
+		// Validate the year returned
+		assertEquals(1, yearSummaries.size());
+		YearSummary yearSummary = yearSummaries.get(2021);
+		assertNotNull(yearSummary, "Could not find data for 2021.  Instead data was for year " + yearSummaries.keySet());
+		
+		MonthSummary monthSummaryMap = yearSummary.get(3);
 		assertNotNull(monthSummaryMap, "Could not find data for March");
 		DaySummary summary = monthSummaryMap.get(17);
 		assertNotNull(summary, "Could not find data for the 17th of March");

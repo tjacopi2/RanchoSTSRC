@@ -20,7 +20,6 @@ import org.junit.jupiter.api.Test;
 import loaders.AMLoader;
 import loaders.DataLoader;
 import loaders.DaySummary;
-import loaders.MonthSummary;
 import loaders.YearSummary;
 import utils.TestUtils;
 
@@ -37,8 +36,14 @@ class TestMonthHTMLGenerator {
 		Set<String> amAddresses = AMLoader.LoadData(amInputDirectory);
 		List<File> logFiles = new ArrayList<File>();
 		DataLoader.FetchLogFiles(inputLogDirectory, logFiles);
-		Map<Integer, MonthSummary> logFileMap = DataLoader.LoadData(logFiles, amAddresses); 
-		Map<Integer, DaySummary> marchData = logFileMap.get(3);
+		Map<Integer, YearSummary> yearSummaries = DataLoader.LoadData(logFiles, amAddresses); 
+		
+		// Validate the year returned
+		assertEquals(1, yearSummaries.size());
+		YearSummary yearSummary = yearSummaries.get(2021);
+		assertNotNull(yearSummary, "Could not find data for 2021.  Instead data was for year " + yearSummaries.keySet());
+		
+		Map<Integer, DaySummary> marchData = yearSummary.get(3);
 		assertNotNull(marchData, "Could not find data for March");
 		
 		MonthHTMLGenerator monthGenerator = new MonthHTMLGenerator(inputTemplateFile, null);
@@ -68,8 +73,14 @@ class TestMonthHTMLGenerator {
 		File inputLogFile = new File("testData\\TestDataAll\\log2021-03-17.csv");
 		Set<String> amAddresses = AMLoader.LoadData(amInputDirectory);
 		
-		YearSummary yearSummary = new YearSummary();
-		DataLoader.LoadFile(amAddresses, yearSummary, inputLogFile);
+		Map<Integer, YearSummary> yearSummaries = new HashMap<Integer, YearSummary>();
+		DataLoader.LoadFile(amAddresses, yearSummaries, inputLogFile);
+		
+		// Validate the year returned
+		assertEquals(1, yearSummaries.size());
+		YearSummary yearSummary = yearSummaries.get(2021);
+		assertNotNull(yearSummary, "Could not find data for 2021.  Instead data was for year " + yearSummaries.keySet());
+		
 		Map<Integer, DaySummary> monthSummaryMap = yearSummary.get(3);
 		assertNotNull(monthSummaryMap, "Could not find data for March");
 		DaySummary summary = monthSummaryMap.get(17);

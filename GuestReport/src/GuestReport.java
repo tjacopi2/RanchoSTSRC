@@ -79,7 +79,12 @@ public class GuestReport {
 		// Generate individual day & month html files
 		DaySummary aSummary = null;
 		Map<Integer, File> monthFileMap = new HashMap<Integer, File>();
-		YearSummary yearSummary = DataLoader.LoadData(logFiles, amAddresses);
+		Map<Integer, YearSummary> yearSummaries = DataLoader.LoadData(logFiles, amAddresses);
+		
+		// Temporary line to just take the first year of data.  Replace when we generate multiple years
+		YearSummary yearSummary = yearSummaries.values().iterator().next();
+		// ----------------------------------------------
+		
 		DayHTMLGenerator dayGenerator = new DayHTMLGenerator(inputDayHeaderTemplateFile);
 		MonthGraphHTMLGenerator monthGraphGenerator = new MonthGraphHTMLGenerator(inputMonthGraphHeaderTemplateFile);
 		MonthHTMLGenerator monthGenerator = new MonthHTMLGenerator(inputMonthHeaderTemplateFile, monthGraphGenerator);
