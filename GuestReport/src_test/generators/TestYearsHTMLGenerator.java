@@ -17,7 +17,7 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
-import loaders.AMLoader;
+import loaders.HOALoader;
 import loaders.DataLoader;
 import loaders.YearSummary;
 import utils.TestUtils;
@@ -33,11 +33,11 @@ class TestYearsHTMLGenerator {
 	@Test
 	void testGenerate() throws IOException, ParseException {
 		File inputDirectory = new File("input\\");
-		File amInputDirectory = new File("testData\\amList\\");
+		File amInputDirectory = new File("testData\\hoaList\\");
 		File inputTemplateFile = new File(inputDirectory, "yearHeader.html");    // We can reuse the same template as individual years
 		File inputLogDirectory = new File("testData\\TestDataCombinedLogFileMultYears");
 
-		Set<String> amAddresses = AMLoader.LoadData(amInputDirectory);
+		Set<String> amAddresses = HOALoader.LoadData(amInputDirectory);
 		List<File> logFiles = new ArrayList<File>();
 		DataLoader.FetchLogFiles(inputLogDirectory, logFiles);
 		

@@ -17,7 +17,7 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
-import loaders.AMLoader;
+import loaders.HOALoader;
 import loaders.DataLoader;
 import loaders.DaySummary;
 import loaders.YearSummary;
@@ -29,11 +29,11 @@ class TestMonthHTMLGenerator {
 	@Test
 	void testGenerate() throws IOException, ParseException {
 		File inputDirectory = new File("input\\");
-		File amInputDirectory = new File("testData\\amList\\");
+		File amInputDirectory = new File("testData\\hoaList\\");
 		File inputTemplateFile = new File(inputDirectory, "monthHeader.html");
 		File inputLogDirectory = new File("testData\\TestDataAll");
 
-		Set<String> amAddresses = AMLoader.LoadData(amInputDirectory);
+		Set<String> amAddresses = HOALoader.LoadData(amInputDirectory);
 		List<File> logFiles = new ArrayList<File>();
 		DataLoader.FetchLogFiles(inputLogDirectory, logFiles);
 		Map<Integer, YearSummary> yearSummaries = DataLoader.LoadData(logFiles, amAddresses); 
@@ -68,10 +68,10 @@ class TestMonthHTMLGenerator {
 	void testGenerateOutputFilename() throws IOException, ParseException {
 		File inputDirectory = new File("input\\");
 		File outputDirectory = new File(".\\output");
-		File amInputDirectory = new File("testData\\amList\\");
+		File amInputDirectory = new File("testData\\hoaList\\");
 		File inputTemplateFile = new File(inputDirectory, "monthHeader.html");
 		File inputLogFile = new File("testData\\TestDataAll\\log2021-03-17.csv");
-		Set<String> amAddresses = AMLoader.LoadData(amInputDirectory);
+		Set<String> amAddresses = HOALoader.LoadData(amInputDirectory);
 		
 		Map<Integer, YearSummary> yearSummaries = new HashMap<Integer, YearSummary>();
 		DataLoader.LoadFile(amAddresses, yearSummaries, inputLogFile);

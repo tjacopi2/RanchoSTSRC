@@ -14,7 +14,7 @@ import generators.MonthGraphHTMLGenerator;
 import generators.MonthHTMLGenerator;
 import generators.YearHTMLGenerator;
 import generators.YearsHTMLGenerator;
-import loaders.AMLoader;
+import loaders.HOALoader;
 import loaders.DataLoader;
 import loaders.DaySummary;
 import loaders.MonthSummary;
@@ -74,11 +74,11 @@ public class GuestReport {
 		}
 		System.out.println("Output html files will be written to " + outputDirectory.getCanonicalPath());
 
-		// Load associate member addresses
-		Set<String> amAddresses = AMLoader.LoadData(inputDirectory);
+		// Load hoa member addresses
+		Set<String> hoaAddresses = HOALoader.LoadData(inputDirectory);
 		
 		// Generate individual day & month html files
-		Map<Integer, YearSummary> yearSummaries = DataLoader.LoadData(logFiles, amAddresses);
+		Map<Integer, YearSummary> yearSummaries = DataLoader.LoadData(logFiles, hoaAddresses);
 		
 		DayHTMLGenerator dayGenerator = new DayHTMLGenerator(inputDayHeaderTemplateFile);
 		MonthGraphHTMLGenerator monthGraphGenerator = new MonthGraphHTMLGenerator(inputMonthGraphHeaderTemplateFile);

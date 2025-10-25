@@ -24,12 +24,12 @@ import loaders.DaySummary.Household;
 public class DataLoader {
     public static final String GUEST = "Guest_";
 	 
-	public static Map<Integer, YearSummary> LoadData(List<File> logFiles, Set<String> amAddresses) {
+	public static Map<Integer, YearSummary> LoadData(List<File> logFiles, Set<String> hoaAddresses) {
 		int count = 0;
 		Map<Integer, YearSummary> yearSummaries = new HashMap<Integer, YearSummary>();
 		for (File f : logFiles) {
 			try {
-				LoadFile(amAddresses, yearSummaries, f);
+				LoadFile(hoaAddresses, yearSummaries, f);
 				count++;
 			} catch (IOException | ParseException e) {
 				System.err.println("Skipping log file " + f.getAbsolutePath() + " because not a valid log format.  Error: " + e.getMessage());
@@ -42,7 +42,7 @@ public class DataLoader {
 		return yearSummaries;
 	}
 
-	public static void LoadFile(Set<String> amAddresses, Map<Integer, YearSummary> yearSummaries,
+	public static void LoadFile(Set<String> hoaAddresses, Map<Integer, YearSummary> yearSummaries,
 			File logFile) throws FileNotFoundException, ParseException, IOException {
 		// Read the log file
 		CSVReader reader = new CSVReader(new FileReader(logFile));
@@ -94,9 +94,8 @@ public class DataLoader {
 				if (h == null) {
 					h = new Household();
 					h.setAddress(address);
-					if (amAddresses.contains(address)) {
-		    			h.setAmHousehold(true);
-		    		}
+					boolean isHOA = hoaAddresses.contains(address) || hoaAddresses.contains(address.toLowerCase());
+		    		h.setAmHousehold(!isHOA);
 					daySummary.getHouseholds().put(address, h);
 				}
 				

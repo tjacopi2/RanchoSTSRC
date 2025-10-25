@@ -17,10 +17,10 @@ class TestMonthSummary {
 	
 	@Test
 	void testSummarizeData() throws IOException, ParseException {
-		File amInputDirectory = new File("testData\\amList\\");
+		File amInputDirectory = new File("testData\\hoaList\\");
 		
 		File inputLogDirectory = new File("testData\\TestDataAll");
-		Set<String> amAddresses = AMLoader.LoadData(amInputDirectory);
+		Set<String> amAddresses = HOALoader.LoadData(amInputDirectory);
 		List<File> logFiles = new ArrayList<File>();
 		DataLoader.FetchLogFiles(inputLogDirectory, logFiles);
 		Map<Integer, YearSummary> yearSummaries = DataLoader.LoadData(logFiles, amAddresses);
@@ -33,9 +33,9 @@ class TestMonthSummary {
 		MonthSummary marchData = yearSummary.get(3);
 		assertNotNull(marchData);
 		assertEquals(3, marchData.size());
-		assertEquals(40, marchData.getTotalHOAMembers());
-		assertEquals(36, marchData.getTotalHOAGuests());
-		assertEquals(2, marchData.getTotalAMMembers());
-		assertEquals(0, marchData.getTotalAMGuests());
+		assertEquals(38, marchData.getTotalHOAMembers());
+		assertEquals(32, marchData.getTotalHOAGuests());
+		assertEquals(4, marchData.getTotalAMMembers());
+		assertEquals(4, marchData.getTotalAMGuests());
 	}
 }

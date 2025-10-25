@@ -31,8 +31,8 @@ class TestDataLoader {
 
 	@Test
 	void testLoadFromSingleFile() throws IOException, ParseException {
-		File inputDirectory = new File("testData\\amList\\");
-		Set<String> amAddresses = AMLoader.LoadData(inputDirectory);
+		File inputDirectory = new File("testData\\hoaList\\");
+		Set<String> amAddresses = HOALoader.LoadData(inputDirectory);
 		
 		File inputFile = new File("testData\\TestDataAll\\log2021-03-17.csv");
 		Map<Integer, YearSummary> yearSummaries = new HashMap<Integer, YearSummary>();
@@ -53,10 +53,10 @@ class TestDataLoader {
 		
 		assertEquals(20, summary.getTotalPeople());
 		assertEquals(16, summary.getTotalGuests());
-		assertEquals(2, summary.getTotalAM());
-		assertEquals(0, summary.getTotalAMGuests());
-		assertEquals(18, summary.getTotalHOA());
-		assertEquals(16, summary.getTotalHOAGuests());
+		assertEquals(4, summary.getTotalAM());
+		assertEquals(4, summary.getTotalAMGuests());
+		assertEquals(16, summary.getTotalHOA());
+		assertEquals(12, summary.getTotalHOAGuests());
 		assertEquals(3, summary.getHouseholds().size());
 		assertEquals(2, summary.getDate().get(Calendar.MONTH));
 		assertEquals(2021, summary.getDate().get(Calendar.YEAR));
@@ -71,12 +71,12 @@ class TestDataLoader {
 		assertEquals("435 Allegan Circle", householdList.get(1).getAddress());
 		assertEquals(4, householdList.get(1).getPeople());
 		assertEquals(4, householdList.get(1).getGuests());
-		assertFalse(householdList.get(1).isAmHousehold());
+		assertTrue(householdList.get(1).isAmHousehold());
 		
 		assertEquals("341 Bodega", householdList.get(2).getAddress());
 		assertEquals(2, householdList.get(2).getPeople());
 		assertEquals(0, householdList.get(2).getGuests());
-		assertTrue(householdList.get(2).isAmHousehold());
+		assertFalse(householdList.get(2).isAmHousehold());
 		
 		assertEquals(8, summary.getEntryHourMap().get(16));
 		assertEquals(12, summary.getEntryHourMap().get(19));
