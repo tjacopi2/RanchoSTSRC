@@ -1,0 +1,63 @@
+<html>
+<head></head>
+<body>
+<form action="http://localhost:5000/addGuests" method="get">
+ 
+  <label id="guestPassCount">?</label>
+  
+  <script language="javascript">
+    // Since this script will set "guestPassCount", it needs to be defined after the label.
+    const query = window.location.search.substring(1);
+    //	console.log("query= " + query);
+    const queryFields = query.split("=");
+	//console.log("field = " + Field);
+    const address = decodeURIComponent(queryFields[1]);	 
+	 
+    function getGuestPassCount(address) {
+      var xhr = new XMLHttpRequest();
+      var url = "http://localhost:5000/getGuestPassCount/" + address;
+      xhr.open("GET", url);
+      xhr.responseType = 'text';
+      xhr.send(null);
+  
+      // need to see response
+      console.log("msg sent to fetch guest pass count for address " + address);
+  
+      xhr.onload = function() {
+        if (xhr.status != 200) { // analyze HTTP status of the response
+          console.log("Error " + xhr.status + ":" + xhr.statusText); // e.g. 404: Not Found
+        } else { // show the result
+          console.log("Request finished. " + xhr.response.length + " bytes returned.  Value = " + xhr.response);
+	      document.getElementById("guestPassCount").innerHTML = xhr.response;
+        }
+      }
+    }
+   
+	getGuestPassCount(address);
+  </script>
+
+  <label> free guest passes remaining</label>
+  <br/>
+  <br/>
+  <label for="GET-address">Address:</label>
+  <input id="GET-address" type="text" name="address" value="xx" readonly><br/><br/>
+  <script language="javascript">
+    document.getElementById("GET-address").value = address;
+  </script>
+  
+  <label for="GET-count">Number of Guests:</label>
+  <input id="GET-count" type="number" name="count" autofocus>
+  <label>  (Do not include grandkids)</label>
+  <br/><br/>
+  <label for="GET-GrandkidCount">Number of Grandkids:</label>
+  <input id="GET-GrandkidCount" type="number" name="grandkids"></input>
+  <label>  (Always free)</label>
+  <br/><br/>
+  <input id="GET-DoNotUseFreePasses" type="checkbox" name="nofreepass"></input>
+  <label for="GET-DoNotUseFreePasses">Do Not Use Free Guest Passes</label>
+  <br/><br/>
+  <input type="submit" value="Submit">
+  <button type="button" onclick="window.close();">Cancel</button>
+</form>
+</body>
+</html>
